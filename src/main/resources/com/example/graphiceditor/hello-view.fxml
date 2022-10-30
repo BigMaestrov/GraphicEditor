@@ -6,7 +6,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.graphiceditor.HelloController">
    <children>
       <AnchorPane prefHeight="47.0" prefWidth="800.0" style="-fx-background-color: #c9c8c5;" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0">
          <children>
@@ -18,6 +18,6 @@
             <ChoiceBox layoutX="565.0" layoutY="12.0" prefHeight="25.0" prefWidth="80.0" AnchorPane.leftAnchor="565.0" AnchorPane.topAnchor="12.0" />
             <Button fx:id="button1" layoutX="666.0" layoutY="11.0" mnemonicParsing="false" onAction="#clearCanvas" prefHeight="25.0" prefWidth="120.0" text="Очистить полотно:" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="11.0" />
          </children></AnchorPane>
-      <Canvas height="554.0" layoutX="-8.0" layoutY="48.0" width="800.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="-8.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="48.0" />
+      <Canvas fx:id="canvas1" height="554.0" layoutX="5.0" layoutY="48.0" onMouseClicked="#addPoint" width="791.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="48.0" />
    </children>
 </AnchorPane>
