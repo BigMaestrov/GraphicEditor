@@ -8,6 +8,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.input.KeyEvent;
@@ -28,20 +29,25 @@ public class HelloController {
     private boolean isPoint = false;
 
     //Блок переменных графических элементов интерфейса
+
+
     @FXML
     public Canvas canvas1;
     @FXML
-    public ComboBox<String> typeComboBox;
+    public ChoiceBox typeChoiceBox;
     @FXML
-    public ComboBox<String> colorComboBox;
-
+    public ChoiceBox colorChoiceBox;
     //Метод срабатывающий при старте программы
     @FXML
     protected void initialize(){
-       ObservableList<String> langs = FXCollections.observableArrayList("-", "КУб Сплайн", "Линия", "Треуголник");
-        typeComboBox = new ComboBox<String>(langs);
-        typeComboBox.setValue("-");
-
+        //Заполнение полей typeChoiceBox
+        ObservableList<String> types = FXCollections.observableArrayList("Прямая", "Куб Сплайн", "Треугольник", "Стрелка");
+        typeChoiceBox.setItems(types);
+        typeChoiceBox.setValue("Прямая");
+        //Заполнение полей colorComboBox
+        ObservableList<String> colors = FXCollections.observableArrayList("Черный", "Красный", "Синий", "Зеленый");
+        colorChoiceBox.setItems(colors);
+        colorChoiceBox.setValue("Черный");
     }
 
     //Метод срабатывающий при нажатии на кнопку "очистить поле"
