@@ -26,6 +26,7 @@ public class HelloController {
     @FXML private Stage primaryStage;
     //Блок переменных для сохранения графических элементов полотна
     private ArrayList<Point2D> points = new ArrayList<Point2D>();
+    private ArrayList<Point2D> pointsForCubeSpline = new ArrayList<Point2D>();
     private boolean isPoint = false;
 
     //Блок переменных графических элементов интерфейса
@@ -53,6 +54,7 @@ public class HelloController {
     protected void clearCanvas(ActionEvent actionEvent) {
         isPoint = false;
         points.clear();
+        pointsForCubeSpline.clear();
         GraphicsContext context = canvas1.getGraphicsContext2D();
         context.setFill(Color.WHITE);
         context.fillRect(0, 0, canvas1.getWidth(), canvas1.getHeight());
@@ -61,29 +63,44 @@ public class HelloController {
     //Метод обрабатывающий нажатия на полотно
     @FXML
     private void addPoint(MouseEvent event) {
+        //Запись точки в которой было вызвано событие
         Point2D newPoint = new Point2D(event.getX(), event.getY());
         GraphicsContext context = canvas1.getGraphicsContext2D();
-        //Построение прямой
-        if(typeChoiceBox.getValue()=="Прямая"){
-            PixelWriter pixelWriter = context.getPixelWriter();
-            Point2D newPoint2D = new Point2D(event.getX(),event.getY());
-            if(event.getButton()== MouseButton.PRIMARY){
-                for (int i = 0; i < 3; i++) {
-                    for (int j = 0; j < 3; j++) {
-                        pixelWriter.setColor((int) newPoint2D.getX() + i, (int) newPoint2D.getY() + j, Color.BLACK);
-                    }
+        PixelWriter pixelWriter = context.getPixelWriter();
+        Point2D newPoint2D = new Point2D(event.getX(),event.getY());
+        //нанесение точки на полотно
+        if(event.getButton()== MouseButton.PRIMARY) {
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    pixelWriter.setColor((int) newPoint2D.getX() + i, (int) newPoint2D.getY() + j, Color.BLACK);
                 }
+            }
+        }
+        //Построение прямой
+        if(typeChoiceBox.getValue()=="Прямая"&& event.getButton()== MouseButton.PRIMARY){
                 isPoint = true;
                 points.add(newPoint);
-            } else{
+            } else if(typeChoiceBox.getValue()=="Прямая"&& event.getButton()== MouseButton.SECONDARY){
                 for(int i=0;i<points.size();i++){
                     context.setStroke(decodeColor(colorChoiceBox.getValue()));
                     context.strokeLine(points.get(i).getX(),points.get(i).getY(), points.get(i+1).getX(),points.get(i+1).getY());
                 }
-            }
         }
         //Построение кубического сплайна
+        if(typeChoiceBox.getValue()=="Куб Сплайн"){
+            if(pointsForCubeSpline.size()<3 && event.getButton()== MouseButton.PRIMARY){
+                pointsForCubeSpline.add(newPoint);
+            } if(pointsForCubeSpline.size()>2 && event.getButton()== MouseButton.SECONDARY){
+                System.out.println("work");
+                context.setStroke(decodeColor(colorChoiceBox.getValue()));
+                context.beginPath();
+                context.bezierCurveTo(pointsForCubeSpline.get(0).getX(),pointsForCubeSpline.get(0).getY(),pointsForCubeSpline.get(1).getX(),pointsForCubeSpline.get(1).getY(),pointsForCubeSpline.get(2).getX(),pointsForCubeSpline.get(2).getY());
+                context.stroke();
+            }
+
+        }
         //Построение треугольника
+
         //Построение стрелки
 
     }
