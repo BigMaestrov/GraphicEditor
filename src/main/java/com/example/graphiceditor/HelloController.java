@@ -15,6 +15,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 
 import java.text.DecimalFormat;
@@ -25,18 +26,15 @@ public class HelloController {
     @FXML private Stage primaryStage;
     //Блок переменных для сохранения графических элементов полотна
     private ArrayList<Point2D> points = new ArrayList<Point2D>();
-    private int indexLastPoint =-1;
     private boolean isPoint = false;
 
     //Блок переменных графических элементов интерфейса
-
-
     @FXML
     public Canvas canvas1;
     @FXML
     public ChoiceBox typeChoiceBox;
     @FXML
-    public ChoiceBox colorChoiceBox;
+    public ChoiceBox<String> colorChoiceBox;
     //Метод срабатывающий при старте программы
     @FXML
     protected void initialize(){
@@ -54,6 +52,7 @@ public class HelloController {
     @FXML
     protected void clearCanvas(ActionEvent actionEvent) {
         isPoint = false;
+        points.clear();
         GraphicsContext context = canvas1.getGraphicsContext2D();
         context.setFill(Color.WHITE);
         context.fillRect(0, 0, canvas1.getWidth(), canvas1.getHeight());
@@ -64,26 +63,35 @@ public class HelloController {
     private void addPoint(MouseEvent event) {
         Point2D newPoint = new Point2D(event.getX(), event.getY());
         GraphicsContext context = canvas1.getGraphicsContext2D();
-        PixelWriter pixelWriter = context.getPixelWriter();
-        Point2D newPoint2D = new Point2D(event.getX(),event.getY());
-        if(event.getButton()== MouseButton.PRIMARY){
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
-                    pixelWriter.setColor((int) newPoint2D.getX() + i, (int) newPoint2D.getY() + j, Color.BLACK);
+        //Построение прямой
+        if(typeChoiceBox.getValue()=="Прямая"){
+            PixelWriter pixelWriter = context.getPixelWriter();
+            Point2D newPoint2D = new Point2D(event.getX(),event.getY());
+            if(event.getButton()== MouseButton.PRIMARY){
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 3; j++) {
+                        pixelWriter.setColor((int) newPoint2D.getX() + i, (int) newPoint2D.getY() + j, Color.BLACK);
+                    }
+                }
+                isPoint = true;
+                points.add(newPoint);
+            } else{
+                for(int i=0;i<points.size();i++){
+                    context.setStroke(decodeColor(colorChoiceBox.getValue()));
+                    context.strokeLine(points.get(i).getX(),points.get(i).getY(), points.get(i+1).getX(),points.get(i+1).getY());
                 }
             }
-            isPoint = true;
-            points.add(newPoint);
-            indexLastPoint++;
-        } else{
-            connectPoints(points.get(indexLastPoint),newPoint2D, pixelWriter);
         }
+        //Построение кубического сплайна
+        //Построение треугольника
+        //Построение стрелки
 
     }
 
 
-    private void connectPoints(Point2D point,Point2D newPoint, PixelWriter writer) {
-        DecimalFormat dc = new DecimalFormat("#.#");
+    @Deprecated
+    private void connectPointsOLD(Point2D point,Point2D newPoint, PixelWriter writer) {
+        DecimalFormat dc = new DecimalFormat("#.##");
         int maxX = returnMax(newPoint.getX(), point.getX());
         int minX = returnMin(newPoint.getX(), point.getX());
         int maxY = returnMax(newPoint.getY(), point.getY());
@@ -98,7 +106,7 @@ public class HelloController {
                 if (r1.equals(r2)) {
                     for (int k = 0; k < 3; k++) {
                         for (int o = 0; o < 3; o++) {
-                            writer.setColor(i + k, j + o, Color.RED);
+                            writer.setColor(i + k, j + o, decodeColor(colorChoiceBox.getValue()));
                         }
                     }
 
@@ -129,5 +137,21 @@ public class HelloController {
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage=primaryStage;
         this.primaryStage.show();
+    }
+
+    public static Color decodeColor(String colorName){
+        Color color = Color.BLACK;
+        switch (colorName){
+            case ("Черный"): color = Color.BLACK;
+            break;
+            case ("Красный"): color = Color.RED;
+                break;
+            case ("Синий"): color = Color.BLUE;
+                break;
+            case ("Зеленый"): color = Color.GREEN;
+                break;
+            default:color = Color.BLACK;
+        }
+        return color;
     }
 }
