@@ -15,7 +15,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class HelloController {
@@ -23,9 +22,8 @@ public class HelloController {
     @FXML
     private Stage primaryStage;
     // Блок переменных для сохранения графических элементов полотна
-    private ArrayList<Point2D> points = new ArrayList<Point2D>();
-    private boolean isPoint = false;
-
+    private ArrayList<Point2D> tempPoints = new ArrayList<Point2D>();
+    ArrayList<Figure> figures = new ArrayList<>();
     // Блок переменных графических элементов интерфейса
     @FXML
     public Canvas canvas1;
@@ -34,13 +32,15 @@ public class HelloController {
     public ChoiceBox typeChoiceBox;
     @FXML
     public ChoiceBox<String> colorChoiceBox;
+    @FXML
+    public ChoiceBox<String> figureChoiceBox;
+    ObservableList<String> figuresNames  = FXCollections.observableArrayList();
 
     // Метод срабатывающий при старте программы
     @FXML
     protected void initialize() {
         // Заполнение полей typeChoiceBox
-        ObservableList<String> types = FXCollections.observableArrayList("Прямая", "Куб Сплайн", "Треугольник",
-                "Стрелка");
+        ObservableList<String> types = FXCollections.observableArrayList("Прямая", "Куб Сплайн", "Треугольник", "Стрелка", "Удалить фигуру");
         typeChoiceBox.setItems(types);
         typeChoiceBox.setValue("Прямая");
         // Заполнение полей colorComboBox
@@ -53,40 +53,50 @@ public class HelloController {
     // Метод срабатывающий при нажатии на кнопку "очистить поле"
     @FXML
     protected void clearCanvas(ActionEvent actionEvent) {
-        isPoint = false;
-        points.clear();
+        tempPoints.clear();
         context = canvas1.getGraphicsContext2D();
         context.setFill(Color.WHITE);
         context.fillRect(0, 0, canvas1.getWidth(), canvas1.getHeight());
+        figures.clear();
+        figuresNames.clear();
+        figureChoiceBox.setItems(figuresNames);
     }
 
     // Метод обрабатывающий нажатия на полотно
     @FXML
     private void addPoint(MouseEvent event) {
-        Point2D newPoint = new Point2D(event.getX(), event.getY());
         context = canvas1.getGraphicsContext2D();
         // Построение прямой
         if (typeChoiceBox.getValue() == "Прямая") {
+            Point2D newPoint = new Point2D(event.getX(), event.getY());
             PixelWriter pixelWriter = context.getPixelWriter();
-            Point2D newPoint2D = new Point2D(event.getX(), event.getY());
+            tempPoints.add(newPoint);
             if (event.getButton() == MouseButton.PRIMARY) {
                 for (int i = 0; i < 3; i++) {
                     for (int j = 0; j < 3; j++) {
-                        pixelWriter.setColor((int) newPoint2D.getX() + i, (int) newPoint2D.getY() + j, Color.BLACK);
+                        pixelWriter.setColor((int) newPoint.getX() + i, (int) newPoint.getY() + j, Color.BLACK);
                     }
                 }
-                isPoint = true;
-                points.add(newPoint);
-            } else {
-                for (int i = 0; i < points.size(); i++) {
-                    context.setStroke(decodeColor(colorChoiceBox.getValue()));
-                    context.strokeLine(points.get(i).getX(), points.get(i).getY(), points.get(i + 1).getX(),
-                            points.get(i + 1).getY());
+            }
+            if (tempPoints.size() == 2) {
+                //Добавление фигуры в список
+                ArrayList<Point2D> figurePoints = new ArrayList<>();
+                for (int i = 0; i < tempPoints.size(); i++) {
+                    figurePoints.add(tempPoints.get(i));
                 }
+                Figure figure = new Figure(figurePoints, "Прямая" + figures.size());
+                figures.add(figure);
+                //Рисование фигуры
+                context.setStroke(decodeColor(colorChoiceBox.getValue()));
+                context.strokeLine(tempPoints.get(0).getX(), tempPoints.get(0).getY(), tempPoints.get(1).getX(),
+                        tempPoints.get(1).getY());
+                figuresNames.add(figure.getName());
+                tempPoints.clear();
             }
         }
         // Построение кубического сплайна
         if (typeChoiceBox.getValue() == "Куб Сплайн") {
+            Point2D newPoint = new Point2D(event.getX(), event.getY());
             PixelWriter pixelWriter = context.getPixelWriter();
             Point2D newPoint2D = new Point2D(event.getX(), event.getY());
             if (event.getButton() == MouseButton.PRIMARY) {
@@ -95,20 +105,26 @@ public class HelloController {
                         pixelWriter.setColor((int) newPoint2D.getX() + i, (int) newPoint2D.getY() + j, Color.BLACK);
                     }
                 }
-                isPoint = true;
-                points.add(newPoint);
+                tempPoints.add(newPoint);
             }
-            if (points.size() == 4)
+            if (tempPoints.size() == 4) {
+                //Добавление фигуры в список
+                ArrayList<Point2D> figurePoints = new ArrayList<>();
+                for (int i = 0; i < tempPoints.size(); i++) {
+                    figurePoints.add(tempPoints.get(i));
+                }
+                CubeSpline cubeSpline = new CubeSpline(figurePoints, "Куб сплайн" + figures.size());
+                figures.add(cubeSpline);
+                //Рисование фигуры
                 context.setStroke(decodeColor(colorChoiceBox.getValue()));
-            context.beginPath();
-            context.moveTo(points.get(0).getX(), points.get(0).getY());
-            context.bezierCurveTo(points.get(1).getX(), points.get(1).getY(), points.get(2).getX(),
-                    points.get(2).getY(), points.get(3).getX(), points.get(3).getY());
-            context.stroke();
-            points.clear();
+                cubeSpline.print(context);
+                figuresNames.add(cubeSpline.getName());
+                tempPoints.clear();
+            }
         }
         // Построение треугольника
         if (typeChoiceBox.getValue() == "Треугольник") {
+            Point2D newPoint = new Point2D(event.getX(), event.getY());
             PixelWriter pixelWriter = context.getPixelWriter();
             Point2D newPoint2D = new Point2D(event.getX(), event.getY());
             if (event.getButton() == MouseButton.PRIMARY) {
@@ -117,23 +133,26 @@ public class HelloController {
                         pixelWriter.setColor((int) newPoint2D.getX() + i, (int) newPoint2D.getY() + j, Color.BLACK);
                     }
                 }
-                isPoint = true;
-                points.add(newPoint);
+                tempPoints.add(newPoint);
             }
-            if (points.size() == 2)
+            if (tempPoints.size() == 2) {
+                //Добавление фигуры в список
+                ArrayList<Point2D> figurePoints = new ArrayList<>();
+                figurePoints.add(new Point2D(tempPoints.get(0).getX(), tempPoints.get(0).getY()));
+                figurePoints.add(new Point2D(tempPoints.get(1).getX(), tempPoints.get(1).getY()));
+                figurePoints.add(new Point2D(tempPoints.get(1).getX() + tempPoints.get(1).getX() - (int) tempPoints.get(0).getX(), tempPoints.get(0).getY()));
+                Figure triangle = new Figure(figurePoints, "Треугольник" + figures.size());
+                figures.add(triangle);
+                //Рисование фигуры
                 context.setStroke(decodeColor(colorChoiceBox.getValue()));
-
-            context.strokeLine(points.get(0).getX(), points.get(0).getY(), points.get(1).getX(), points.get(1).getY());
-
-            context.strokeLine(points.get(1).getX(), points.get(1).getY(),
-                    points.get(1).getX() + points.get(1).getX() - (int) points.get(0).getX(), points.get(0).getY());
-
-            context.strokeLine(points.get(1).getX() + points.get(1).getX() - (int) points.get(0).getX(),
-                    points.get(0).getY(), points.get(0).getX(), points.get(0).getY());
-            points.clear();
+                triangle.print(context);
+                figuresNames.add(triangle.getName());
+                tempPoints.clear();
+            }
         }
         // Построение стрелки
         if (typeChoiceBox.getValue() == "Стрелка") {
+            Point2D newPoint = new Point2D(event.getX(), event.getY());
             PixelWriter pixelWriter = context.getPixelWriter();
             Point2D newPoint2D = new Point2D(event.getX(), event.getY());
             if (event.getButton() == MouseButton.PRIMARY) {
@@ -142,57 +161,47 @@ public class HelloController {
                         pixelWriter.setColor((int) newPoint2D.getX() + i, (int) newPoint2D.getY() + j, Color.BLACK);
                     }
                 }
-                isPoint = true;
-                points.add(newPoint);
+                tempPoints.add(newPoint);
             }
-            if (points.size() == 3) {
-                double x0 = points.get(0).getX();
-                double xm = points.get(1).getX();
-                double y0 = points.get(0).getY();
-                double ym = points.get(2).getY();
+            if (tempPoints.size() == 3) {
+                //Переменные для хранения введенных строчек
+                double x0 = tempPoints.get(0).getX();
+                double xm = tempPoints.get(1).getX();
+                double y0 = tempPoints.get(0).getY();
+                double ym = tempPoints.get(2).getY();
+                //Добавление фигуры в список
+                ArrayList<Point2D> figurePoints = new ArrayList<>();
+                figurePoints.add(new Point2D(x0, y0 + (ym - y0) * 0.666));
+                figurePoints.add(new Point2D(x0 + (xm - x0) * 0.666, y0 + (ym - y0) * 0.666));
+                figurePoints.add(new Point2D(x0 + (xm - x0) * 0.666, ym));
+                figurePoints.add(new Point2D(xm, y0 + (ym - y0) * 0.5));
+                figurePoints.add(new Point2D(x0 + (xm - x0) * 0.666, y0));
+                figurePoints.add(new Point2D(x0 + (xm - x0) * 0.666, y0 + (ym - y0) * 0.333));
+                figurePoints.add(new Point2D(x0, y0 + (ym - y0) * 0.333));
+                Figure arrow = new  Figure(figurePoints, "Стрелка" + figures.size());
+                figures.add(arrow);
+                //Установление цвета фигуры
                 context.setStroke(decodeColor(colorChoiceBox.getValue()));
-
-                //1->4
-                context.strokeLine(x0, y0+(ym-y0)*0.6, x0+(xm-x0)*0.6, y0+(ym-y0)*0.6);
-                context.strokeLine(x0+(xm-x0)*0.6, y0+(ym-y0)*0.6, x0+(xm-x0)*0.6, ym);
-                context.strokeLine(x0+(xm-x0)*0.6, ym, xm, y0+(ym-y0)*0.5);
-                //4->7
-                context.strokeLine(xm, y0+(ym-y0)*0.5, x0+(xm-x0)*0.6, y0);
-                context.strokeLine(x0+(xm-x0)*0.6, y0, x0+(xm-x0)*0.6, y0+(ym-y0)*0.3);
-                context.strokeLine(x0+(xm-x0)*0.6, y0+(ym-y0)*0.3, x0, y0+(ym-y0)*0.3);
-                context.strokeLine(x0, y0+(ym-y0)*0.3,x0, y0+(ym-y0)*0.6);
-
-                points.clear();
+                arrow.print(context);
+                figuresNames.add(arrow.getName());
+                tempPoints.clear();
             }
         }
-    }
-
-    @Deprecated
-    private void connectPointsOLD(Point2D point, Point2D newPoint, PixelWriter writer) {
-        DecimalFormat dc = new DecimalFormat("#.##");
-        int maxX = returnMax(newPoint.getX(), point.getX());
-        int minX = returnMin(newPoint.getX(), point.getX());
-        int maxY = returnMax(newPoint.getY(), point.getY());
-        int minY = returnMin(newPoint.getY(), point.getY());
-        System.out.println(newPoint.getX() + " " + point.getX() + " " + newPoint.getY() + " " + point.getY());
-        for (int i = minX; i < maxX; i++) {
-            for (int j = minY; j < maxY; j++) {
-                // ((i - point.getX()) / (point.getX() - newPoint.getX()) == (((j -
-                // point.getY()) / (newPoint.getY() - point.getY())))
-                // (dc.format(((i - point.getX()) / (point.getX() - newPoint.getX()))) ==
-                // dc.format(((j - point.getY()) / (point.getY() - newPoint.getY()))))
-                String r1 = dc.format((i - point.getX()) / (newPoint.getX() - point.getX()));
-                String r2 = dc.format((j - point.getY()) / (newPoint.getY() - point.getY()));
-                if (r1.equals(r2)) {
-                    for (int k = 0; k < 3; k++) {
-                        for (int o = 0; o < 3; o++) {
-                            writer.setColor(i + k, j + o, decodeColor(colorChoiceBox.getValue()));
-                        }
-                    }
-
+        //Удаление фигуры
+        if (typeChoiceBox.getValue() == "Удалить фигуру") {
+            for(int i=0;i<figuresNames.size();i++){
+                if(figuresNames.get(i)==figureChoiceBox.getValue()){
+                    figures.remove(i);
+                    figuresNames.remove(i);
                 }
             }
+            context.setFill(Color.WHITE);
+            context.fillRect(0, 0, canvas1.getWidth(), canvas1.getHeight());
+            for(int i=0;i<figuresNames.size();i++){
+                figures.get(i).print(context);
+            }
         }
+        figureChoiceBox.setItems(figuresNames);
     }
 
     private static int returnMax(double num1, double num2) {
@@ -236,21 +245,5 @@ public class HelloController {
                 color = Color.BLACK;
         }
         return color;
-    }
-
-    public static void drawArrow() {
-
-    }
-
-    public static int calculateLength(int x1, int x2) {
-        int result = 0;
-        /*
-         * if (x1 > x2) {
-         * result = x1-x2;
-         * }else{
-         * result = x2-x1;
-         * }
-         */
-        return x1 - x2;
     }
 }
