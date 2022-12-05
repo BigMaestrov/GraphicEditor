@@ -22,17 +22,20 @@ public class CubeSpline extends Figure{
                 context.stroke();
 
     }
-/*
-//Point - 0=x 1=y
-    public void DrawCubeSpline(GraphicsContext g, Point2D[] P)
+
+    public void DrawCubeSpline(GraphicsContext g, Point[] P)
     {
-        Point2D[] L = new Point2D[4]; // Матрица вещественных коэффициентов
-        Point2D Pv1 = P[0];
-        Point2D Pv2 = P[0];
-        double dt = 0.04;
+        Point[] L = new Point[4]; // Матрица вещественных коэффициентов
+        for(int i =0;i<P.length;i++){
+            L[i]= new Point(P[i]);
+        }
+        Point Pv1 = new Point(P[0]);
+        Point Pv2 = new Point(P[0]);
+        double dt = 0.0001; //Частота точек?
         double t = 0;
         double xt, yt;
-        Point2D Ppred = P[0], Pt = P[0];
+        Point Ppred = new Point(P[0]);
+        Point Pt = new Point(P[0]);
         //DrawPen.CustomEndCap = new AdjustableArrowCap(0, 0);
         // Касательные векторы
         Pv1.X = 4 * (P[1].X - P[0].X);
@@ -52,12 +55,11 @@ public class CubeSpline extends Figure{
         {
             xt = ((L[0].X * t + L[1].X) * t + L[2].X) * t + L[3].X;
             yt = ((L[0].Y * t + L[1].Y) * t + L[2].Y) * t + L[3].Y;
-            Pt.X = (int)Math.Round(xt);
-            Pt.Y = (int)Math.Round(yt);
-            g.DrawLine(DrPen, Ppred, Pt);
+            Pt.X = (int)Math.round(xt);
+            Pt.Y = (int)Math.round(yt);
+            g.strokeLine(Ppred.getX(), Ppred.getY(), Pt.getX(), Pt.getY());
             Ppred = Pt;
             t = t + dt;
         }
     }
-*/
 }

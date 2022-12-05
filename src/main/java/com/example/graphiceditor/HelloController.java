@@ -34,7 +34,7 @@ public class HelloController {
     public ChoiceBox<String> colorChoiceBox;
     @FXML
     public ChoiceBox<String> figureChoiceBox;
-    ObservableList<String> figuresNames  = FXCollections.observableArrayList();
+    ObservableList<String> figuresNames = FXCollections.observableArrayList();
 
     // Метод срабатывающий при старте программы
     @FXML
@@ -117,7 +117,14 @@ public class HelloController {
                 figures.add(cubeSpline);
                 //Рисование фигуры
                 context.setStroke(decodeColor(colorChoiceBox.getValue()));
-                cubeSpline.print(context);
+
+                Point[] points = new Point[4];
+                for(int i=0;i<tempPoints.size();i++){
+                    points[i] = new Point(tempPoints.get(i).getX(), tempPoints.get(i).getY());
+                }
+
+                //cubeSpline.print(context);
+                cubeSpline.DrawCubeSpline(context, points);
                 figuresNames.add(cubeSpline.getName());
                 tempPoints.clear();
             }
@@ -178,7 +185,7 @@ public class HelloController {
                 figurePoints.add(new Point2D(x0 + (xm - x0) * 0.666, y0));
                 figurePoints.add(new Point2D(x0 + (xm - x0) * 0.666, y0 + (ym - y0) * 0.333));
                 figurePoints.add(new Point2D(x0, y0 + (ym - y0) * 0.333));
-                Figure arrow = new  Figure(figurePoints, "Стрелка" + figures.size());
+                Figure arrow = new Figure(figurePoints, "Стрелка" + figures.size());
                 figures.add(arrow);
                 //Установление цвета фигуры
                 context.setStroke(decodeColor(colorChoiceBox.getValue()));
@@ -189,15 +196,15 @@ public class HelloController {
         }
         //Удаление фигуры
         if (typeChoiceBox.getValue() == "Удалить фигуру") {
-            for(int i=0;i<figuresNames.size();i++){
-                if(figuresNames.get(i)==figureChoiceBox.getValue()){
+            for (int i = 0; i < figuresNames.size(); i++) {
+                if (figuresNames.get(i) == figureChoiceBox.getValue()) {
                     figures.remove(i);
                     figuresNames.remove(i);
                 }
             }
             context.setFill(Color.WHITE);
             context.fillRect(0, 0, canvas1.getWidth(), canvas1.getHeight());
-            for(int i=0;i<figuresNames.size();i++){
+            for (int i = 0; i < figuresNames.size(); i++) {
                 figures.get(i).print(context);
             }
         }
