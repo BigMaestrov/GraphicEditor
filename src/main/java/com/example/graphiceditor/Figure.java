@@ -43,4 +43,42 @@ public class Figure {
     public void printFiguresData(){
         System.out.println( this.name +"Num points"+ this.figurePoints.size());
     }
+/*
+    private void FillByLine()
+    {
+        // Определяем наивысшую и наинизшую по Y координате точки
+        Point pmin = VertexList[0];
+        Point pmax = VertexList[0];
+        int ymin = 0;
+        int ymax = pictureBox1.Height;
+        foreach (Point p in VertexList)
+        {
+            if (p.Y > pmax.Y) pmax = p;
+            if (p.Y < pmin.Y) pmin = p;
+        }
+        ymin = pmin.Y < ymin ? ymin : pmin.Y;
+        ymax = pmax.Y > ymax ? ymax : pmax.Y;
+
+        List<int> xBoundaries = new List<int>();
+
+        for (int y = ymin; y <= ymax; y++)
+        {
+            xBoundaries.Clear();
+            for (int i = 0; i < VertexList.Count ; i++)
+            {
+                int k = i < VertexList.Count - 1 ? i + 1 : 0;
+                if (((VertexList[i].Y < y) && (VertexList[k].Y >= y)) || ((VertexList[i].Y >= y) && (VertexList[k].Y < y)))
+                {
+                    // формула определения x координаты пересечения двух отрезков, заданных вершинами
+                    double x = VertexList[i].X + ((VertexList[k].X - VertexList[i].X) * (y - VertexList[i].Y)) / (VertexList[k].Y - VertexList[i].Y);
+                    xBoundaries.Add((int)x);
+                }
+            }
+            xBoundaries.Sort((a, b) => a.CompareTo(b)); // сортировка по возростанию
+            for (int el = 0; el < xBoundaries.Count - 1; el += 2)
+            {
+                g.DrawLine(DrawPen, new Point(xBoundaries[el], y), new Point(xBoundaries[el + 1], y));
+            }
+        }
+    }*/
 }
