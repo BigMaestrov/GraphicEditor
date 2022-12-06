@@ -3,25 +3,25 @@ package com.example.graphiceditor;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.CubicCurve;
 
 import java.util.ArrayList;
 
 public class CubeSpline extends Figure{
 
-    public CubeSpline(ArrayList<Point> figurePoints, String name) {
+    public CubeSpline(ArrayList<Point> figurePoints, String name, Color color) {
         this.figurePoints = figurePoints;
         this.name = name;
+        this.color = color;
     }
 
     public void print(GraphicsContext context, Canvas canvas){
-        CubicCurve cubicCurve = new CubicCurve();
-                context.beginPath();
-                context.moveTo(figurePoints.get(0).getX(), figurePoints.get(0).getY());
-                context.bezierCurveTo(figurePoints.get(1).getX(), figurePoints.get(1).getY(), figurePoints.get(2).getX(),
-                        figurePoints.get(2).getY(), figurePoints.get(3).getX(), figurePoints.get(3).getY());
-                context.stroke();
-
+        Point[] points = new Point[4];
+        for (int i = 0; i < figurePoints.size(); i++) {
+            points[i] = new Point(figurePoints.get(i).getX(), figurePoints.get(i).getY());
+        }
+        this.DrawCubeSpline(context, points);
     }
 
     //Отрисовывает кубический сплайн

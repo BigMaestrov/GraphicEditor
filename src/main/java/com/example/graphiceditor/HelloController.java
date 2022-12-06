@@ -113,12 +113,12 @@ public class HelloController {
                 for (int i = 0; i < tempPoints.size(); i++) {
                     figurePoints.add(tempPoints.get(i));
                 }
-                CubeSpline cubeSpline = new CubeSpline(figurePoints, "Куб сплайн" + figures.size());
+                CubeSpline cubeSpline = new CubeSpline(figurePoints, "Куб сплайн" + figures.size(), decodeColor(colorChoiceBox.getValue()));
                 figures.add(cubeSpline);
                 //Рисование фигуры
                 context.setStroke(decodeColor(colorChoiceBox.getValue()));
                 Point[] points = new Point[4];
-                for(int i=0;i<tempPoints.size();i++){
+                for (int i = 0; i < tempPoints.size(); i++) {
                     points[i] = new Point(tempPoints.get(i).getX(), tempPoints.get(i).getY());
                 }
                 cubeSpline.DrawCubeSpline(context, points);
