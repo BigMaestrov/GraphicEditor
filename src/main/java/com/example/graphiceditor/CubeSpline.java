@@ -23,6 +23,7 @@ public class CubeSpline extends Figure{
 
     }
 
+    //Отрисовывает кубический сплайн
     public void DrawCubeSpline(GraphicsContext g, Point[] P)
     {
         Point[] L = new Point[4]; // Матрица вещественных коэффициентов

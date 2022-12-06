@@ -122,8 +122,6 @@ public class HelloController {
                 for(int i=0;i<tempPoints.size();i++){
                     points[i] = new Point(tempPoints.get(i).getX(), tempPoints.get(i).getY());
                 }
-
-                //cubeSpline.print(context);
                 cubeSpline.DrawCubeSpline(context, points);
                 figuresNames.add(cubeSpline.getName());
                 tempPoints.clear();
