@@ -20,7 +20,7 @@ public class HelloApplication extends Application {
         fxmlLoader.setLocation(HelloApplication.class.getResource("hello-view.fxml"));
         AnchorPane root = fxmlLoader.load();
         HelloController helloController = fxmlLoader.getController();
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 1550, 800);
         stage.setTitle("GraphicEditor");
         stage.setScene(scene);
         helloController.setPrimaryStage(stage);

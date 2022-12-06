@@ -18,6 +18,6 @@
             <ChoiceBox fx:id="figureChoiceBox" layoutX="565.0" layoutY="12.0" prefHeight="25.0" prefWidth="80.0" AnchorPane.leftAnchor="565.0" AnchorPane.topAnchor="12.0" />
             <Button fx:id="button1" layoutX="666.0" layoutY="11.0" mnemonicParsing="false" onAction="#clearCanvas" prefHeight="25.0" prefWidth="120.0" text="Очистить полотно:" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="11.0" />
          </children></AnchorPane>
-      <Canvas fx:id="canvas1" height="554.0" layoutX="5.0" layoutY="48.0" onKeyPressed="#keyPressed" onMouseClicked="#addPoint" width="791.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="48.0" />
+      <Canvas fx:id="canvas1" height="748.0" layoutX="5.0" layoutY="48.0" onKeyPressed="#keyPressed" onMouseClicked="#addPoint" width="1539.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="48.0" />
    </children>
 </AnchorPane>
