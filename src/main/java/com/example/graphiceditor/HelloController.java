@@ -84,7 +84,7 @@ public class HelloController {
                 for (int i = 0; i < tempPoints.size(); i++) {
                     figurePoints.add(tempPoints.get(i));
                 }
-                Figure figure = new Figure(figurePoints, "Прямая" + figures.size(), context, canvas1);
+                Figure figure = new Figure(figurePoints, "Прямая" + figures.size(), decodeColor(colorChoiceBox.getValue()));
                 figures.add(figure);
                 //Рисование фигуры
                 context.setStroke(decodeColor(colorChoiceBox.getValue()));
@@ -145,11 +145,11 @@ public class HelloController {
                 figurePoints.add(new Point(tempPoints.get(0).getX(), tempPoints.get(0).getY()));
                 figurePoints.add(new Point(tempPoints.get(1).getX(), tempPoints.get(1).getY()));
                 figurePoints.add(new Point(tempPoints.get(1).getX() + tempPoints.get(1).getX() - (int) tempPoints.get(0).getX(), tempPoints.get(0).getY()));
-                Figure triangle = new Figure(figurePoints, "Треугольник" + figures.size(), context, canvas1);
+                Figure triangle = new Figure(figurePoints, "Треугольник" + figures.size(), decodeColor(colorChoiceBox.getValue()));
                 figures.add(triangle);
                 //Рисование фигуры
                 context.setStroke(decodeColor(colorChoiceBox.getValue()));
-                triangle.print(context);
+                triangle.print(context, canvas1);
                 figuresNames.add(triangle.getName());
                 tempPoints.clear();
             }
@@ -182,11 +182,11 @@ public class HelloController {
                 figurePoints.add(new Point(x0 + (xm - x0) * 0.666, y0));
                 figurePoints.add(new Point(x0 + (xm - x0) * 0.666, y0 + (ym - y0) * 0.333));
                 figurePoints.add(new Point(x0, y0 + (ym - y0) * 0.333));
-                Figure arrow = new Figure(figurePoints, "Стрелка" + figures.size(), context, canvas1);
+                Figure arrow = new Figure(figurePoints, "Стрелка" + figures.size(), decodeColor(colorChoiceBox.getValue()));
                 figures.add(arrow);
                 //Установление цвета фигуры
                 context.setStroke(decodeColor(colorChoiceBox.getValue()));
-                arrow.print(context);
+                arrow.print(context, canvas1);
                 figuresNames.add(arrow.getName());
                 tempPoints.clear();
             }
@@ -202,7 +202,9 @@ public class HelloController {
             context.setFill(Color.WHITE);
             context.fillRect(0, 0, canvas1.getWidth(), canvas1.getHeight());
             for (int i = 0; i < figuresNames.size(); i++) {
-                figures.get(i).print(context);
+                //Установление цвета фигуры
+                context.setStroke(figures.get(i).color);
+                figures.get(i).print(context, canvas1);
             }
         }
         figureChoiceBox.setItems(figuresNames);

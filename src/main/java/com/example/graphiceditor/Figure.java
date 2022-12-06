@@ -3,6 +3,7 @@ package com.example.graphiceditor;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,21 +11,23 @@ import java.util.List;
 public class Figure {
     ArrayList<Point> figurePoints;
     String name;
+    Color color;
 
     public Figure() {
     }
 
-    public Figure(ArrayList<Point> figurePoints, String name, GraphicsContext context, Canvas canvas) {
+    public Figure(ArrayList<Point> figurePoints, String name, Color color) {
         this.figurePoints = figurePoints;
         this.name = name;
-        FillByLine(context, canvas);
+        this.color = color;
     }
 
-    public void print(GraphicsContext context){
+    public void print(GraphicsContext context, Canvas canvas1){
         for (int i = 0; i < this.figurePoints.size()-1; i++) {
             context.strokeLine(figurePoints.get(i).getX(),figurePoints.get(i).getY(), figurePoints.get(i+1).getX(),figurePoints.get(i+1).getY());
         }
         context.strokeLine(figurePoints.get(this.figurePoints.size()-1).getX(),figurePoints.get(this.figurePoints.size()-1).getY(), figurePoints.get(0).getX(),figurePoints.get(0).getY());
+        fillByLine(context, canvas1);
     }
 
     public ArrayList<Point> getPoints() {
@@ -47,23 +50,20 @@ public class Figure {
         System.out.println( this.name +"Num points"+ this.figurePoints.size());
     }
 
-    private void FillByLine(GraphicsContext g, Canvas canvas) {
+    private void fillByLine(GraphicsContext g, Canvas canvas) {
         // Определяем наивысшую и наинизшую по Y координате точки
         Point pmin = figurePoints.get(0);
         Point pmax = figurePoints.get(0);
         int ymin = 0;
         int ymax = (int) canvas.getHeight();
-        Point p = new Point(0, 0);
-        for (int i = 0; i < figurePoints.size(); i++) {
+        for(Point p : figurePoints)
+        {
             if (p.Y > pmax.Y) pmax = p;
             if (p.Y < pmin.Y) pmin = p;
-
         }
         ymin = pmin.Y < ymin ? ymin : (int) pmin.Y;
         ymax = pmax.Y > ymax ? ymax : (int) pmax.Y;
-
         List<Integer> xBoundaries = new ArrayList<>();
-
         for (int y = ymin; y <= ymax; y++) {
             xBoundaries.clear();
             for (int i = 0; i < figurePoints.size(); i++) {
@@ -75,12 +75,7 @@ public class Figure {
                 }
             }
             //Сортировка
-            xBoundaries.sort((a, b) -> a.compareTo(b));
-
-            for(int i=0; i<xBoundaries.size();i++){
-                System.out.println(xBoundaries.get(i));
-            }
-
+            //xBoundaries.sort((a, b) -> a.compareTo(b));
             for (int el = 0; el < xBoundaries.size() - 1; el += 2) {
                 g.strokeLine(xBoundaries.get(el), y, xBoundaries.get(el+1), y);
             }

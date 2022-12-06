@@ -1,6 +1,7 @@
 package com.example.graphiceditor;
 
 import javafx.geometry.Point2D;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.CubicCurve;
 
@@ -13,7 +14,7 @@ public class CubeSpline extends Figure{
         this.name = name;
     }
 
-    public void print(GraphicsContext context){
+    public void print(GraphicsContext context, Canvas canvas){
         CubicCurve cubicCurve = new CubicCurve();
                 context.beginPath();
                 context.moveTo(figurePoints.get(0).getX(), figurePoints.get(0).getY());
