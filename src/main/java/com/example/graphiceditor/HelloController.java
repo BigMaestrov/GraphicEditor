@@ -208,6 +208,261 @@ public class HelloController {
             }
         }
         figureChoiceBox.setItems(figuresNames);
+        //Геометрические преобразования
+
+        /*
+        private Pgn Pgn; //Преобразумая фигура
+        private int TransformationType; //Номер преобразования
+        private int IterationCount; //Число итераций
+        private int Iteration = 0; //Номер текущей итерации
+        private Point FirstPosition; //Начальная позиция
+        private Point LastPosition; //Конечная позиция
+        private float mX, mY; //Малые изменения координат
+        private float dX, dY; //Малые увеличения
+        private float mF; //Малые углы
+
+
+         /*
+         * Выполнение трансформаций
+        public void DoTransformation()
+        {
+            Iteration++;
+            switch (TransformationType)
+            {
+                case 0:
+                    Pgn.Move(mX, mY);
+                    break;
+                case 1:
+                    Pgn.Rotate(mF, FirstPosition.X, FirstPosition.Y);
+                    break;
+                case 2:
+                    Pgn.Resize(dX, dY, FirstPosition.X, FirstPosition.Y);
+                    break;
+                case 3:
+                    Pgn.MirrorX(FirstPosition.Y);
+                    Iteration = IterationCount;
+                    break;
+                case 4:
+                    Pgn.MirrorY(FirstPosition.X);
+                    Iteration = IterationCount;
+                    break;
+                case 5:
+                    Pgn.MirrorXY(FirstPosition.X, FirstPosition.Y);
+                    Iteration = IterationCount;
+                    break;
+            }
+        }
+         */
+        /*
+        //Метод плоско-параллельного перемещения
+        public void Move(float dx, float dy)
+        {
+            PointF fP = new PointF();
+            for (int i = 0; i < VertexList.Count; i++)
+            {
+                fP.X = VertexList[i].X + dx;
+                fP.Y = VertexList[i].Y + dy;
+                VertexList[i] = fP;
+            }
+        }
+        //Метод вращения
+        public void Rotate(float df, float xc, float yc)
+        {
+            PointF fP = new PointF();
+            for(int i = 0; i < VertexList.Count; i++)
+            {
+                fP.X = VertexList[i].X - xc;
+                fP.Y = VertexList[i].Y - yc;
+                fP.X = fP.X * (float)Math.Cos(df) - fP.Y * (float)Math.Sin(df);
+                fP.Y = fP.Y * (float)Math.Cos(df) + fP.X * (float)Math.Sin(df);
+                fP.X += xc;
+                fP.Y += yc;
+                VertexList[i] = fP;
+            }
+        }
+        //Метод масштабирования
+        public void Resize(float dx, float dy, float xc, float yc)
+        {
+            PointF fP = new PointF();
+            for (int i = 0; i < VertexList.Count; i++)
+            {
+                fP.X = VertexList[i].X - xc;
+                fP.Y = VertexList[i].Y - yc;
+                fP.X = fP.X * (1 + dx);
+                fP.Y = fP.Y * (1 + dy);
+                fP.X += xc;
+                fP.Y += yc;
+                VertexList[i] = fP;
+            }
+        }
+        //Отражение по Y
+        public void MirrorY(float xc)
+        {
+            PointF fP = new PointF();
+            for (int i = 0; i < VertexList.Count; i++)
+            {
+                fP.Y = VertexList[i].Y;
+                fP.X = VertexList[i].X - xc;
+                fP.X = -fP.X;
+                fP.X += xc;
+                VertexList[i] = fP;
+            }
+        }*/
+        //ТМО
+        /*
+// списки краевых x координат для каждой фигуры
+        List<int> Xra = new List<int>();
+        List<int> Xla = new List<int>();
+        List<int> Xrb = new List<int>();
+        List<int> Xlb = new List<int>();
+
+        // Очищаем экран перед отрисовкой
+        g.Clear(Color.White);
+
+        for (int y = ymin; y <= ymax; y++)
+        {
+            // очищаем списки координат
+            Xra.Clear();
+            Xla.Clear();
+            Xlb.Clear();
+            Xrb.Clear();
+
+            // заполнение границ фигуры А
+            for (int i = 0; i < VertexListA.Count; i++)
+            {
+                int k = i < VertexListA.Count - 1 ? i + 1 : 0;
+                // обработка граничных случаев
+                if (((VertexListA[i].Y < y) && (VertexListA[k].Y >= y)) || ((VertexListA[i].Y >= y) && (VertexListA[k].Y < y)))
+                {
+                    // формула определения x координаты пересечения двух отрезков, заданных вершинами
+                    double x = VertexListA[i].X + ((VertexListA[k].X - VertexListA[i].X) * (y - VertexListA[i].Y)) / (VertexListA[k].Y - VertexListA[i].Y);
+                    if (VertexListA[k].Y - VertexListA[i].Y < 0)
+                    {
+                        Xra.Add((int)x);
+                    }
+                    else
+                    {
+                        Xla.Add((int)x);
+                    }
+                }
+            }
+
+            // заполнение границ фигуры В
+            for (int i = 0; i < VertexListB.Count; i++)
+            {
+                int k = i < VertexListB.Count - 1 ? i + 1 : 0;
+                // обработка граничных случаев
+                if (((VertexListB[i].Y < y) && (VertexListB[k].Y >= y)) || ((VertexListB[i].Y >= y) && (VertexListB[k].Y < y)))
+                {
+                    // формула определения x координаты пересечения двух отрезков, заданных вершинами
+                    double x = VertexListB[i].X + ((VertexListB[k].X - VertexListB[i].X) * (y - VertexListB[i].Y)) / (VertexListB[k].Y - VertexListB[i].Y);
+                    if (VertexListB[k].Y - VertexListB[i].Y < 0)
+                    {
+                        Xrb.Add((int)x);
+                    }
+                    else
+                    {
+                        Xlb.Add((int)x);
+                    }
+                }
+            }
+
+            List<PointInfo> M = new List<PointInfo>(); // рабочии массив
+
+            // Заполнение рабочего массива:
+            int n = Xla.Count;
+
+            for (int i = 0; i < n; i++)
+            {
+                PointInfo Buff = new PointInfo();
+                Buff.x = Xla[i];
+                Buff.dQ = 2;
+                M.Add(Buff);
+            }
+
+            n = Xra.Count;
+
+            for (int i = 0; i < n; i++)
+            {
+                PointInfo Buff = new PointInfo();
+                Buff.x = Xra[i];
+                Buff.dQ = -2;
+                M.Add(Buff);
+            }
+
+            n = Xlb.Count;
+
+            for (int i = 0; i < n; i++)
+            {
+                PointInfo Buff = new PointInfo();
+                Buff.x = Xlb[i];
+                Buff.dQ = 1;
+                M.Add(Buff);
+            }
+
+            n = Xrb.Count;
+
+            for (int i = 0; i < n; i++)
+            {
+                PointInfo Buff = new PointInfo();
+                Buff.x = Xrb[i];
+                Buff.dQ = -1;
+                M.Add(Buff);
+            }
+
+            // сортируем M по возрастанию X координаты
+            M.Sort((a, b) => a.x.CompareTo(b.x));
+
+            int Q = 0;
+            int xemin = 0;
+            int xemax = pictureBox1.Width;
+
+            // Конечные списки x границ
+            List<int> Xlr = new List<int>();
+            List<int> Xrr= new List<int>();
+
+            if (M.Count == 0) continue;
+
+            if ((M[0].x >= xemin) && (M[0].dQ < 0))
+            {
+                Xlr.Add(xemin);
+                Q = -M[0].dQ;
+            }
+            // Выполнение ТМО
+            for (int i = 0; i < M.Count; i++)
+            {
+                int x = M[i].x;
+                int Qnew = Q + M[i].dQ;
+                if (
+                        (Q < SetQ[0] || Q > SetQ[1]) &&
+                                (Qnew >= SetQ[0] && Qnew <= SetQ[1])
+                )
+                {
+                    Xlr.Add(x);
+                }
+                if (
+                        (Q >= SetQ[0] && Q <= SetQ[1]) &&
+                                (Qnew < SetQ[0] || Qnew > SetQ[1])
+                )
+                {
+                    Xrr.Add(x);
+                }
+                Q = Qnew;
+            }
+            if (Q >= SetQ[0] && Q <= SetQ[1])
+            {
+                Xrr.Add(xemax);
+            }
+            for (int id = 0; id < Xlr.Count && id < Xrr.Count; id++)
+            {
+                if (Xlr[id] < Xrr[id])
+                {
+                    g.DrawLine(DrawPen, new Point(Xlr[id], y), new Point(Xrr[id], y));
+                }
+            }
+        }
+    }
+    */
     }
 
     private static int returnMax(double num1, double num2) {
