@@ -1,20 +1,23 @@
 package com.example.graphiceditor;
 
 import javafx.geometry.Point2D;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Figure {
-    ArrayList<Point2D> figurePoints;
+    ArrayList<Point> figurePoints;
     String name;
 
     public Figure() {
     }
 
-    public Figure(ArrayList<Point2D> figurePoints, String name) {
+    public Figure(ArrayList<Point> figurePoints, String name, GraphicsContext context, Canvas canvas) {
         this.figurePoints = figurePoints;
         this.name = name;
+        FillByLine(context, canvas);
     }
 
     public void print(GraphicsContext context){
@@ -24,11 +27,11 @@ public class Figure {
         context.strokeLine(figurePoints.get(this.figurePoints.size()-1).getX(),figurePoints.get(this.figurePoints.size()-1).getY(), figurePoints.get(0).getX(),figurePoints.get(0).getY());
     }
 
-    public ArrayList<Point2D> getPoints() {
+    public ArrayList<Point> getPoints() {
         return figurePoints;
     }
 
-    public void setPoints(ArrayList<Point2D> points) {
+    public void setPoints(ArrayList<Point> points) {
         this.figurePoints = points;
     }
 
@@ -43,42 +46,44 @@ public class Figure {
     public void printFiguresData(){
         System.out.println( this.name +"Num points"+ this.figurePoints.size());
     }
-/*
-    private void FillByLine()
-    {
+
+    private void FillByLine(GraphicsContext g, Canvas canvas) {
         // Определяем наивысшую и наинизшую по Y координате точки
-        Point pmin = VertexList[0];
-        Point pmax = VertexList[0];
+        Point pmin = figurePoints.get(0);
+        Point pmax = figurePoints.get(0);
         int ymin = 0;
-        int ymax = pictureBox1.Height;
-        foreach (Point p in VertexList)
-        {
+        int ymax = (int) canvas.getHeight();
+        Point p = new Point(0, 0);
+        for (int i = 0; i < figurePoints.size(); i++) {
             if (p.Y > pmax.Y) pmax = p;
             if (p.Y < pmin.Y) pmin = p;
+
         }
-        ymin = pmin.Y < ymin ? ymin : pmin.Y;
-        ymax = pmax.Y > ymax ? ymax : pmax.Y;
+        ymin = pmin.Y < ymin ? ymin : (int) pmin.Y;
+        ymax = pmax.Y > ymax ? ymax : (int) pmax.Y;
 
-        List<int> xBoundaries = new List<int>();
+        List<Integer> xBoundaries = new ArrayList<>();
 
-        for (int y = ymin; y <= ymax; y++)
-        {
-            xBoundaries.Clear();
-            for (int i = 0; i < VertexList.Count ; i++)
-            {
-                int k = i < VertexList.Count - 1 ? i + 1 : 0;
-                if (((VertexList[i].Y < y) && (VertexList[k].Y >= y)) || ((VertexList[i].Y >= y) && (VertexList[k].Y < y)))
-                {
+        for (int y = ymin; y <= ymax; y++) {
+            xBoundaries.clear();
+            for (int i = 0; i < figurePoints.size(); i++) {
+                int k = i < figurePoints.size() - 1 ? i + 1 : 0;
+                if (((figurePoints.get(i).Y < y) && (figurePoints.get(k).Y >= y)) || ((figurePoints.get(i).Y >= y) && (figurePoints.get(k).Y < y))) {
                     // формула определения x координаты пересечения двух отрезков, заданных вершинами
-                    double x = VertexList[i].X + ((VertexList[k].X - VertexList[i].X) * (y - VertexList[i].Y)) / (VertexList[k].Y - VertexList[i].Y);
-                    xBoundaries.Add((int)x);
+                    double x = figurePoints.get(i).X + ((figurePoints.get(k).X - figurePoints.get(i).X) * (y - figurePoints.get(i).Y)) / (figurePoints.get(k).Y - figurePoints.get(i).Y);
+                    xBoundaries.add((int) x);
                 }
             }
-            xBoundaries.Sort((a, b) => a.CompareTo(b)); // сортировка по возростанию
-            for (int el = 0; el < xBoundaries.Count - 1; el += 2)
-            {
-                g.DrawLine(DrawPen, new Point(xBoundaries[el], y), new Point(xBoundaries[el + 1], y));
+            //Сортировка
+            xBoundaries.sort((a, b) -> a.compareTo(b));
+
+            for(int i=0; i<xBoundaries.size();i++){
+                System.out.println(xBoundaries.get(i));
+            }
+
+            for (int el = 0; el < xBoundaries.size() - 1; el += 2) {
+                g.strokeLine(xBoundaries.get(el), y, xBoundaries.get(el+1), y);
             }
         }
-    }*/
+    }
 }

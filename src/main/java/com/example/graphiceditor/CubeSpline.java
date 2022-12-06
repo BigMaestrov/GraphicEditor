@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class CubeSpline extends Figure{
 
-    public CubeSpline(ArrayList<Point2D> figurePoints, String name) {
+    public CubeSpline(ArrayList<Point> figurePoints, String name) {
         this.figurePoints = figurePoints;
         this.name = name;
     }
@@ -37,7 +37,6 @@ public class CubeSpline extends Figure{
         double xt, yt;
         Point Ppred = new Point(P[0]);
         Point Pt = new Point(P[0]);
-        //DrawPen.CustomEndCap = new AdjustableArrowCap(0, 0);
         // Касательные векторы
         Pv1.X = 4 * (P[1].X - P[0].X);
         Pv1.Y = 4 * (P[1].Y - P[0].Y);

@@ -22,7 +22,7 @@ public class HelloController {
     @FXML
     private Stage primaryStage;
     // Блок переменных для сохранения графических элементов полотна
-    private ArrayList<Point2D> tempPoints = new ArrayList<Point2D>();
+    private ArrayList<Point> tempPoints = new ArrayList<Point>();
     ArrayList<Figure> figures = new ArrayList<>();
     // Блок переменных графических элементов интерфейса
     @FXML
@@ -68,7 +68,7 @@ public class HelloController {
         context = canvas1.getGraphicsContext2D();
         // Построение прямой
         if (typeChoiceBox.getValue() == "Прямая") {
-            Point2D newPoint = new Point2D(event.getX(), event.getY());
+            Point newPoint = new Point(event.getX(), event.getY());
             PixelWriter pixelWriter = context.getPixelWriter();
             tempPoints.add(newPoint);
             if (event.getButton() == MouseButton.PRIMARY) {
@@ -80,11 +80,11 @@ public class HelloController {
             }
             if (tempPoints.size() == 2) {
                 //Добавление фигуры в список
-                ArrayList<Point2D> figurePoints = new ArrayList<>();
+                ArrayList<Point> figurePoints = new ArrayList<>();
                 for (int i = 0; i < tempPoints.size(); i++) {
                     figurePoints.add(tempPoints.get(i));
                 }
-                Figure figure = new Figure(figurePoints, "Прямая" + figures.size());
+                Figure figure = new Figure(figurePoints, "Прямая" + figures.size(), context, canvas1);
                 figures.add(figure);
                 //Рисование фигуры
                 context.setStroke(decodeColor(colorChoiceBox.getValue()));
@@ -96,7 +96,7 @@ public class HelloController {
         }
         // Построение кубического сплайна
         if (typeChoiceBox.getValue() == "Куб Сплайн") {
-            Point2D newPoint = new Point2D(event.getX(), event.getY());
+            Point newPoint = new Point(event.getX(), event.getY());
             PixelWriter pixelWriter = context.getPixelWriter();
             Point2D newPoint2D = new Point2D(event.getX(), event.getY());
             if (event.getButton() == MouseButton.PRIMARY) {
@@ -109,7 +109,7 @@ public class HelloController {
             }
             if (tempPoints.size() == 4) {
                 //Добавление фигуры в список
-                ArrayList<Point2D> figurePoints = new ArrayList<>();
+                ArrayList<Point> figurePoints = new ArrayList<>();
                 for (int i = 0; i < tempPoints.size(); i++) {
                     figurePoints.add(tempPoints.get(i));
                 }
@@ -117,7 +117,6 @@ public class HelloController {
                 figures.add(cubeSpline);
                 //Рисование фигуры
                 context.setStroke(decodeColor(colorChoiceBox.getValue()));
-
                 Point[] points = new Point[4];
                 for(int i=0;i<tempPoints.size();i++){
                     points[i] = new Point(tempPoints.get(i).getX(), tempPoints.get(i).getY());
@@ -129,7 +128,7 @@ public class HelloController {
         }
         // Построение треугольника
         if (typeChoiceBox.getValue() == "Треугольник") {
-            Point2D newPoint = new Point2D(event.getX(), event.getY());
+            Point newPoint = new Point(event.getX(), event.getY());
             PixelWriter pixelWriter = context.getPixelWriter();
             Point2D newPoint2D = new Point2D(event.getX(), event.getY());
             if (event.getButton() == MouseButton.PRIMARY) {
@@ -142,11 +141,11 @@ public class HelloController {
             }
             if (tempPoints.size() == 2) {
                 //Добавление фигуры в список
-                ArrayList<Point2D> figurePoints = new ArrayList<>();
-                figurePoints.add(new Point2D(tempPoints.get(0).getX(), tempPoints.get(0).getY()));
-                figurePoints.add(new Point2D(tempPoints.get(1).getX(), tempPoints.get(1).getY()));
-                figurePoints.add(new Point2D(tempPoints.get(1).getX() + tempPoints.get(1).getX() - (int) tempPoints.get(0).getX(), tempPoints.get(0).getY()));
-                Figure triangle = new Figure(figurePoints, "Треугольник" + figures.size());
+                ArrayList<Point> figurePoints = new ArrayList<>();
+                figurePoints.add(new Point(tempPoints.get(0).getX(), tempPoints.get(0).getY()));
+                figurePoints.add(new Point(tempPoints.get(1).getX(), tempPoints.get(1).getY()));
+                figurePoints.add(new Point(tempPoints.get(1).getX() + tempPoints.get(1).getX() - (int) tempPoints.get(0).getX(), tempPoints.get(0).getY()));
+                Figure triangle = new Figure(figurePoints, "Треугольник" + figures.size(), context, canvas1);
                 figures.add(triangle);
                 //Рисование фигуры
                 context.setStroke(decodeColor(colorChoiceBox.getValue()));
@@ -157,7 +156,7 @@ public class HelloController {
         }
         // Построение стрелки
         if (typeChoiceBox.getValue() == "Стрелка") {
-            Point2D newPoint = new Point2D(event.getX(), event.getY());
+            Point newPoint = new Point(event.getX(), event.getY());
             PixelWriter pixelWriter = context.getPixelWriter();
             Point2D newPoint2D = new Point2D(event.getX(), event.getY());
             if (event.getButton() == MouseButton.PRIMARY) {
@@ -175,15 +174,15 @@ public class HelloController {
                 double y0 = tempPoints.get(0).getY();
                 double ym = tempPoints.get(2).getY();
                 //Добавление фигуры в список
-                ArrayList<Point2D> figurePoints = new ArrayList<>();
-                figurePoints.add(new Point2D(x0, y0 + (ym - y0) * 0.666));
-                figurePoints.add(new Point2D(x0 + (xm - x0) * 0.666, y0 + (ym - y0) * 0.666));
-                figurePoints.add(new Point2D(x0 + (xm - x0) * 0.666, ym));
-                figurePoints.add(new Point2D(xm, y0 + (ym - y0) * 0.5));
-                figurePoints.add(new Point2D(x0 + (xm - x0) * 0.666, y0));
-                figurePoints.add(new Point2D(x0 + (xm - x0) * 0.666, y0 + (ym - y0) * 0.333));
-                figurePoints.add(new Point2D(x0, y0 + (ym - y0) * 0.333));
-                Figure arrow = new Figure(figurePoints, "Стрелка" + figures.size());
+                ArrayList<Point> figurePoints = new ArrayList<>();
+                figurePoints.add(new Point(x0, y0 + (ym - y0) * 0.666));
+                figurePoints.add(new Point(x0 + (xm - x0) * 0.666, y0 + (ym - y0) * 0.666));
+                figurePoints.add(new Point(x0 + (xm - x0) * 0.666, ym));
+                figurePoints.add(new Point(xm, y0 + (ym - y0) * 0.5));
+                figurePoints.add(new Point(x0 + (xm - x0) * 0.666, y0));
+                figurePoints.add(new Point(x0 + (xm - x0) * 0.666, y0 + (ym - y0) * 0.333));
+                figurePoints.add(new Point(x0, y0 + (ym - y0) * 0.333));
+                Figure arrow = new Figure(figurePoints, "Стрелка" + figures.size(), context, canvas1);
                 figures.add(arrow);
                 //Установление цвета фигуры
                 context.setStroke(decodeColor(colorChoiceBox.getValue()));
