@@ -3,6 +3,7 @@ package com.example.graphiceditor;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.PixelWriter;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
@@ -96,8 +97,10 @@ public class Figure {
         }
     }
 
+    /*
+    Метод возвращающий координаты центра фигуры
+     */
     public Point getCenter(){
-        Point center;
         double minX = figurePoints.get(0).X;
         double maxX = figurePoints.get(0).X;
         double minY = figurePoints.get(0).Y;
@@ -109,13 +112,13 @@ public class Figure {
             if(figurePoints.get(i).X < minX){
                 minX = figurePoints.get(i).X ;
             }
-            if(figurePoints.get(i).Y > maxX){
-                maxX = figurePoints.get(i).Y;
+            if(figurePoints.get(i).Y > maxY){
+                maxY = figurePoints.get(i).Y;
             }
-            if(figurePoints.get(i).Y < minX){
-                minX = figurePoints.get(i).Y;
+            if(figurePoints.get(i).Y < minY){
+                minY = figurePoints.get(i).Y;
             }
         }
-        return center = new Point((maxX+minX)/2, (maxY+minY)/2);
+        return  new Point((maxX+minX)/2, (maxY+minY)/2);
     }
 }

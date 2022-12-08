@@ -213,7 +213,6 @@ public class HelloController {
         if (typeChoiceBox.getValue() == "Перемещение") {
             Point newPoint = new Point(event.getX(), event.getY());
             PixelWriter pixelWriter = context.getPixelWriter();
-            tempPoints.add(newPoint);
             if (event.getButton() == MouseButton.PRIMARY) {
                 for (int i = 0; i < 3; i++) {
                     for (int j = 0; j < 3; j++) {
@@ -226,12 +225,9 @@ public class HelloController {
                 //Поиск выбранной фигуры
                 if (figuresNames.get(i) == figureChoiceBox.getValue()) {
                     //Смещение точек
-                    System.out.println("work1");
                     figures.get(i).move(newPoint);
-                    System.out.println("work2");
                 }
             }
-            System.out.println("work");
             context.setFill(Color.WHITE);
             context.fillRect(0, 0, canvas1.getWidth(), canvas1.getHeight());
             for (int i = 0; i < figuresNames.size(); i++) {
@@ -240,7 +236,6 @@ public class HelloController {
                 figures.get(i).print(context, canvas1);
             }
             figureChoiceBox.setItems(figuresNames);
-
         }
         figureChoiceBox.setItems(figuresNames);
     }

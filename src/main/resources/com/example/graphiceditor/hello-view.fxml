@@ -10,12 +10,12 @@
    <children>
       <AnchorPane prefHeight="47.0" prefWidth="800.0" style="-fx-background-color: #c9c8c5;" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0">
          <children>
-            <TextField editable="false" layoutX="14.0" layoutY="11.0" prefHeight="25.0" prefWidth="144.0" text="Тип граф элемента" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="11.0" />
+            <TextField editable="false" layoutX="14.0" layoutY="11.0" prefHeight="25.0" prefWidth="144.0" text="Выбор операции:" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="11.0" />
             <ChoiceBox fx:id="typeChoiceBox" layoutX="158.0" layoutY="11.0" prefHeight="25.0" prefWidth="80.0" AnchorPane.leftAnchor="158.0" AnchorPane.topAnchor="11.0" />
             <TextField editable="false" layoutX="262.0" layoutY="12.0" prefHeight="25.0" prefWidth="107.0" text="Цвет:" AnchorPane.leftAnchor="262.0" AnchorPane.topAnchor="12.0" />
             <ChoiceBox fx:id="colorChoiceBox" layoutX="368.0" layoutY="11.0" prefHeight="25.0" prefWidth="80.0" AnchorPane.leftAnchor="368.0" AnchorPane.topAnchor="11.0" />
-            <TextField editable="false" layoutX="474.0" layoutY="12.0" prefHeight="25.0" prefWidth="93.0" text="Выбор фигуры:" AnchorPane.leftAnchor="474.0" AnchorPane.topAnchor="12.0" />
-            <ChoiceBox fx:id="figureChoiceBox" layoutX="568.0" layoutY="11.0" prefHeight="26.0" prefWidth="161.0" AnchorPane.leftAnchor="568.0" AnchorPane.topAnchor="11.0" />
+            <TextField editable="false" layoutX="474.0" layoutY="12.0" prefHeight="25.0" prefWidth="107.0" text="Выбор фигуры:" AnchorPane.leftAnchor="474.0" AnchorPane.topAnchor="12.0" />
+            <ChoiceBox fx:id="figureChoiceBox" layoutX="585.0" layoutY="11.0" prefHeight="26.0" prefWidth="144.0" AnchorPane.leftAnchor="585.0" AnchorPane.topAnchor="11.0" />
             <Button fx:id="button1" layoutX="666.0" layoutY="11.0" mnemonicParsing="false" onAction="#clearCanvas" prefHeight="25.0" prefWidth="120.0" text="Очистить полотно:" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="11.0" />
          </children></AnchorPane>
       <Canvas fx:id="canvas1" height="748.0" layoutX="5.0" layoutY="48.0" onKeyPressed="#keyPressed" onMouseClicked="#addPoint" width="1539.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="48.0" />
