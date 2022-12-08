@@ -8,6 +8,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Slider;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
@@ -35,6 +36,8 @@ public class HelloController {
     @FXML
     public ChoiceBox<String> figureChoiceBox;
     ObservableList<String> figuresNames = FXCollections.observableArrayList();
+    @FXML
+    Slider angleSlider;
 
     // Метод срабатывающий при старте программы
     @FXML
@@ -235,36 +238,59 @@ public class HelloController {
                 context.setStroke(figures.get(i).color);
                 figures.get(i).print(context, canvas1);
             }
-            figureChoiceBox.setItems(figuresNames);
+        }
+        //Поворот
+        if (typeChoiceBox.getValue() == "Поворот") {
+            Point newPoint = new Point(event.getX(), event.getY());
+            PixelWriter pixelWriter = context.getPixelWriter();
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    pixelWriter.setColor((int) newPoint.getX() + i, (int) newPoint.getY() + j, Color.BLACK);
+                }
+            }
+            //Поворот фигуры
+            for (int i = 0; i < figuresNames.size(); i++) {
+                //Поиск выбранной фигуры
+                if (figuresNames.get(i) == figureChoiceBox.getValue()) {
+                    //Смещение точек
+                    figures.get(i).rotate(angleSlider.getValue(), newPoint.X, newPoint.Y);
+                }
+            }
+            context.setFill(Color.WHITE);
+            context.fillRect(0, 0, canvas1.getWidth(), canvas1.getHeight());
+            for (int i = 0; i < figuresNames.size(); i++) {
+                //Установление цвета фигуры
+                context.setStroke(figures.get(i).color);
+                figures.get(i).print(context, canvas1);
+            }
+        }
+        if (typeChoiceBox.getValue() == "Масштабирование") {
+            Point newPoint = new Point(event.getX(), event.getY());
+            PixelWriter pixelWriter = context.getPixelWriter();
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    pixelWriter.setColor((int) newPoint.getX() + i, (int) newPoint.getY() + j, Color.BLACK);
+                }
+            }
+            //Масштабирование
+            for (int i = 0; i < figuresNames.size(); i++) {
+                //Поиск выбранной фигуры
+                if (figuresNames.get(i) == figureChoiceBox.getValue()) {
+                    //Смещение точек
+                    figures.get(i).scaling(newPoint);
+                }
+            }
+            context.setFill(Color.WHITE);
+            context.fillRect(0, 0, canvas1.getWidth(), canvas1.getHeight());
+            for (int i = 0; i < figuresNames.size(); i++) {
+                //Установление цвета фигуры
+                context.setStroke(figures.get(i).color);
+                figures.get(i).print(context, canvas1);
+            }
         }
         figureChoiceBox.setItems(figuresNames);
     }
             /*
-        public void Move(float dx, float dy)
-        {
-            PointF fP = new PointF();
-            for (int i = 0; i < VertexList.Count; i++)
-            {
-                fP.X = VertexList[i].X + dx;
-                fP.Y = VertexList[i].Y + dy;
-                VertexList[i] = fP;
-            }
-        }
-        //Поворот
-        public void Rotate(float df, float xc, float yc)
-        {
-            PointF fP = new PointF();
-            for(int i = 0; i < VertexList.Count; i++)
-            {
-                fP.X = VertexList[i].X - xc;
-                fP.Y = VertexList[i].Y - yc;
-                fP.X = fP.X * (float)Math.Cos(df) - fP.Y * (float)Math.Sin(df);
-                fP.Y = fP.Y * (float)Math.Cos(df) + fP.X * (float)Math.Sin(df);
-                fP.X += xc;
-                fP.Y += yc;
-                VertexList[i] = fP;
-            }
-        }
         //Масштабирование
         public void Resize(float dx, float dy, float xc, float yc)
         {

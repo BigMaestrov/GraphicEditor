@@ -3,6 +3,7 @@
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
@@ -17,6 +18,7 @@
             <TextField editable="false" layoutX="474.0" layoutY="12.0" prefHeight="25.0" prefWidth="107.0" text="Выбор фигуры:" AnchorPane.leftAnchor="474.0" AnchorPane.topAnchor="12.0" />
             <ChoiceBox fx:id="figureChoiceBox" layoutX="585.0" layoutY="11.0" prefHeight="26.0" prefWidth="144.0" AnchorPane.leftAnchor="585.0" AnchorPane.topAnchor="11.0" />
             <Button fx:id="button1" layoutX="666.0" layoutY="11.0" mnemonicParsing="false" onAction="#clearCanvas" prefHeight="25.0" prefWidth="120.0" text="Очистить полотно:" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="11.0" />
+            <Slider fx:id="angleSlider" layoutX="774.0" layoutY="17.0" max="360.0" showTickLabels="true" showTickMarks="true" value="180.0" />
          </children></AnchorPane>
       <Canvas fx:id="canvas1" height="748.0" layoutX="5.0" layoutY="48.0" onKeyPressed="#keyPressed" onMouseClicked="#addPoint" width="1539.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="48.0" />
    </children>

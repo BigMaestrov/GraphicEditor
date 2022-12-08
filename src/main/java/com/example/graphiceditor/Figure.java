@@ -83,13 +83,13 @@ public class Figure {
     }
 
 
-    public void move(Point newPoint){
+    public void move(Point newPoint) {
         Point center = getCenter();
         double dx = newPoint.X - center.X;
         double dy = newPoint.Y - center.Y;
         double x;
         double y;
-        for(int i =0;i<figurePoints.size();i++){
+        for (int i = 0; i < figurePoints.size(); i++) {
             x = figurePoints.get(i).X;
             y = figurePoints.get(i).Y;
             figurePoints.get(i).setX(x + dx);
@@ -98,27 +98,71 @@ public class Figure {
     }
 
     /*
+    Метод поворота фигуры
+     */
+    public void rotate(double df, double xc, double yc) {
+        df = df/180*Math.PI;
+        for (int i = 0; i < figurePoints.size(); i++) {
+            Point temp = new Point(figurePoints.get(i).X - xc, figurePoints.get(i).Y - yc);
+            double tempX = temp.X * Math.cos(df) - temp.Y * Math.sin(df);
+            temp.Y = temp.X * Math.sin(df) + temp.Y * Math.cos(df);
+            temp.X = tempX;
+            temp.X += xc;
+            temp.Y += yc;
+            figurePoints.set(i, temp);
+        }
+    }
+    public void scaling( Point point)
+    {
+        double xc = 1.1;
+        double yc = 1.1;
+        for (int i = 0; i < figurePoints.size(); i++)
+        {
+            Point temp = new Point(figurePoints.get(i).X - point.X, figurePoints.get(i).Y - point.Y);
+            temp.X *= 0.952381f;
+            temp.Y *= 0.952381f;
+            temp.X += point.X;
+            temp.Y += point.Y;
+            figurePoints.set(i,temp);
+        }
+    }
+
+   /* public void rotate(double df, double xc, double yc) {
+        Point fP = new Point(0, 0);
+        for (int i = 0; i < figurePoints.size(); i++) {
+            fP.X = figurePoints.get(i).X - xc;
+            fP.Y = figurePoints.get(i).Y - yc;
+            fP.X = fP.X *  Math.cos(df) - fP.Y *  Math.sin(df);
+            fP.Y = fP.Y *  Math.cos(df) + fP.X *  Math.sin(df);
+            fP.X += xc;
+            fP.Y += yc;
+            figurePoints.get(i).setY(fP.Y);
+            figurePoints.get(i).setX(fP.X);
+        }
+    }*/
+
+    /*
     Метод возвращающий координаты центра фигуры
      */
-    public Point getCenter(){
+    public Point getCenter() {
         double minX = figurePoints.get(0).X;
         double maxX = figurePoints.get(0).X;
         double minY = figurePoints.get(0).Y;
         double maxY = figurePoints.get(0).Y;
         for (int i = 0; i < figurePoints.size(); i++) {
-            if(figurePoints.get(i).X > maxX){
+            if (figurePoints.get(i).X > maxX) {
                 maxX = figurePoints.get(i).X;
             }
-            if(figurePoints.get(i).X < minX){
-                minX = figurePoints.get(i).X ;
+            if (figurePoints.get(i).X < minX) {
+                minX = figurePoints.get(i).X;
             }
-            if(figurePoints.get(i).Y > maxY){
+            if (figurePoints.get(i).Y > maxY) {
                 maxY = figurePoints.get(i).Y;
             }
-            if(figurePoints.get(i).Y < minY){
+            if (figurePoints.get(i).Y < minY) {
                 minY = figurePoints.get(i).Y;
             }
         }
-        return  new Point((maxX+minX)/2, (maxY+minY)/2);
+        return new Point((maxX + minX) / 2, (maxY + minY) / 2);
     }
 }

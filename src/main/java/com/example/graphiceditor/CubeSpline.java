@@ -6,7 +6,7 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 
-public class CubeSpline extends Figure{
+public class CubeSpline extends Figure {
 
     public CubeSpline(ArrayList<Point> figurePoints, String name, Color color) {
         this.figurePoints = figurePoints;
@@ -14,7 +14,7 @@ public class CubeSpline extends Figure{
         this.color = color;
     }
 
-    public void print(GraphicsContext context, Canvas canvas){
+    public void print(GraphicsContext context, Canvas canvas) {
         Point[] points = new Point[4];
         for (int i = 0; i < figurePoints.size(); i++) {
             points[i] = new Point(figurePoints.get(i).getX(), figurePoints.get(i).getY());
@@ -23,11 +23,10 @@ public class CubeSpline extends Figure{
     }
 
     //Отрисовывает кубический сплайн
-    public void DrawCubeSpline(GraphicsContext g, Point[] P)
-    {
+    public void DrawCubeSpline(GraphicsContext g, Point[] P) {
         Point[] L = new Point[4]; // Матрица вещественных коэффициентов
-        for(int i =0;i<P.length;i++){
-            L[i]= new Point(P[i]);
+        for (int i = 0; i < P.length; i++) {
+            L[i] = new Point(P[i]);
         }
         Point Pv1 = new Point(P[0]);
         Point Pv2 = new Point(P[0]);
@@ -50,15 +49,18 @@ public class CubeSpline extends Figure{
         L[2].Y = Pv1.Y; // Cy
         L[3].X = P[0].X; // Dx
         L[3].Y = P[0].Y; // Dy
-        while (t < 1 + dt / 2)
-        {
+        while (t < 1 + dt / 2) {
             xt = ((L[0].X * t + L[1].X) * t + L[2].X) * t + L[3].X;
             yt = ((L[0].Y * t + L[1].Y) * t + L[2].Y) * t + L[3].Y;
-            Pt.X = (int)Math.round(xt);
-            Pt.Y = (int)Math.round(yt);
+            Pt.X = (int) Math.round(xt);
+            Pt.Y = (int) Math.round(yt);
             g.strokeLine(Ppred.getX(), Ppred.getY(), Pt.getX(), Pt.getY());
             Ppred = Pt;
             t = t + dt;
         }
+    }
+
+    public Point getCenter() {
+        return new Point((figurePoints.get(0).X + figurePoints.get(2).X) / 2, (figurePoints.get(0).Y + figurePoints.get(2).Y) / 2);
     }
 }
