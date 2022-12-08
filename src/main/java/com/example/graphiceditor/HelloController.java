@@ -43,7 +43,7 @@ public class HelloController {
     @FXML
     protected void initialize() {
         // Заполнение полей typeChoiceBox
-        ObservableList<String> types = FXCollections.observableArrayList("Прямая", "Куб Сплайн", "Треугольник", "Стрелка", "Удалить фигуру", "Перемещение", "Поворот", "Масштабирование", "Отражение");
+        ObservableList<String> types = FXCollections.observableArrayList("Прямая", "Куб Сплайн", "Треугольник", "Стрелка", "Удалить фигуру", "Перемещение", "Поворот", "Увеличение", "Уменьшение", "Отражение");
         typeChoiceBox.setItems(types);
         typeChoiceBox.setValue("Прямая");
         // Заполнение полей colorComboBox
@@ -264,7 +264,7 @@ public class HelloController {
                 figures.get(i).print(context, canvas1);
             }
         }
-        if (typeChoiceBox.getValue() == "Масштабирование") {
+        if (typeChoiceBox.getValue() == "Увеличение") {
             Point newPoint = new Point(event.getX(), event.getY());
             PixelWriter pixelWriter = context.getPixelWriter();
             for (int i = 0; i < 3; i++) {
@@ -277,7 +277,7 @@ public class HelloController {
                 //Поиск выбранной фигуры
                 if (figuresNames.get(i) == figureChoiceBox.getValue()) {
                     //Смещение точек
-                    figures.get(i).scaling(newPoint);
+                    figures.get(i).upScaling(newPoint);
                 }
             }
             context.setFill(Color.WHITE);
@@ -288,136 +288,57 @@ public class HelloController {
                 figures.get(i).print(context, canvas1);
             }
         }
+        if (typeChoiceBox.getValue() == "Уменьшение") {
+            Point newPoint = new Point(event.getX(), event.getY());
+            PixelWriter pixelWriter = context.getPixelWriter();
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    pixelWriter.setColor((int) newPoint.getX() + i, (int) newPoint.getY() + j, Color.BLACK);
+                }
+            }
+            //Масштабирование
+            for (int i = 0; i < figuresNames.size(); i++) {
+                //Поиск выбранной фигуры
+                if (figuresNames.get(i) == figureChoiceBox.getValue()) {
+                    //Смещение точек
+                    figures.get(i).downScaling(newPoint);
+                }
+            }
+            context.setFill(Color.WHITE);
+            context.fillRect(0, 0, canvas1.getWidth(), canvas1.getHeight());
+            for (int i = 0; i < figuresNames.size(); i++) {
+                //Установление цвета фигуры
+                context.setStroke(figures.get(i).color);
+                figures.get(i).print(context, canvas1);
+            }
+        }
+        if (typeChoiceBox.getValue() == "Отражение") {
+            Point newPoint = new Point(event.getX(), event.getY());
+            PixelWriter pixelWriter = context.getPixelWriter();
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    pixelWriter.setColor((int) newPoint.getX() + i, (int) newPoint.getY() + j, Color.BLACK);
+                }
+            }
+            //Масштабирование
+            for (int i = 0; i < figuresNames.size(); i++) {
+                //Поиск выбранной фигуры
+                if (figuresNames.get(i) == figureChoiceBox.getValue()) {
+                    //Смещение точек
+                    figures.get(i).mirrorY(newPoint.Y);
+                }
+            }
+            context.setFill(Color.WHITE);
+            context.fillRect(0, 0, canvas1.getWidth(), canvas1.getHeight());
+            for (int i = 0; i < figures.size(); i++) {
+                //Установление цвета фигуры
+                context.setStroke(figures.get(i).color);
+                figures.get(i).print(context, canvas1);
+            }
+        }
         figureChoiceBox.setItems(figuresNames);
     }
-            /*
-        //Масштабирование
-        public void Resize(float dx, float dy, float xc, float yc)
-        {
-            PointF fP = new PointF();
-            for (int i = 0; i < VertexList.Count; i++)
-            {
-                fP.X = VertexList[i].X - xc;
-                fP.Y = VertexList[i].Y - yc;
-                fP.X = fP.X * (1 + dx);
-                fP.Y = fP.Y * (1 + dy);
-                fP.X += xc;
-                fP.Y += yc;
-                VertexList[i] = fP;
-            }
-        }
-        //Отражение
-        public void MirrorY(float xc)
-        {
-            PointF fP = new PointF();
-            for (int i = 0; i < VertexList.Count; i++)
-            {
-                fP.Y = VertexList[i].Y;
-                fP.X = VertexList[i].X - xc;
-                fP.X = -fP.X;
-                fP.X += xc;
-                VertexList[i] = fP;
-            }
-        }
-        //Метод плоско-параллельного перемещения
-
-        /*
-        private Pgn Pgn; //Преобразумая фигура
-        private int TransformationType; //Номер преобразования
-        private int IterationCount; //Число итераций
-        private int Iteration = 0; //Номер текущей итерации
-        private Point FirstPosition; //Начальная позиция
-        private Point LastPosition; //Конечная позиция
-        private float mX, mY; //Малые изменения координат
-        private float dX, dY; //Малые увеличения
-        private float mF; //Малые углы
-         /*
-         * Выполнение трансформаций
-        public void DoTransformation()
-        {
-            Iteration++;
-            switch (TransformationType)
-            {
-                case 0:
-                    Pgn.Move(mX, mY);
-                    break;
-                case 1:
-                    Pgn.Rotate(mF, FirstPosition.X, FirstPosition.Y);
-                    break;
-                case 2:
-                    Pgn.Resize(dX, dY, FirstPosition.X, FirstPosition.Y);
-                    break;
-                case 3:
-                    Pgn.MirrorX(FirstPosition.Y);
-                    Iteration = IterationCount;
-                    break;
-                case 4:
-                    Pgn.MirrorY(FirstPosition.X);
-                    Iteration = IterationCount;
-                    break;
-                case 5:
-                    Pgn.MirrorXY(FirstPosition.X, FirstPosition.Y);
-                    Iteration = IterationCount;
-                    break;
-            }
-        }
-         */
-        /*
-        //Метод плоско-параллельного перемещения
-        public void Move(float dx, float dy)
-        {
-            PointF fP = new PointF();
-            for (int i = 0; i < VertexList.Count; i++)
-            {
-                fP.X = VertexList[i].X + dx;
-                fP.Y = VertexList[i].Y + dy;
-                VertexList[i] = fP;
-            }
-        }
-        //Метод вращения
-        public void Rotate(float df, float xc, float yc)
-        {
-            PointF fP = new PointF();
-            for(int i = 0; i < VertexList.Count; i++)
-            {
-                fP.X = VertexList[i].X - xc;
-                fP.Y = VertexList[i].Y - yc;
-                fP.X = fP.X * (float)Math.Cos(df) - fP.Y * (float)Math.Sin(df);
-                fP.Y = fP.Y * (float)Math.Cos(df) + fP.X * (float)Math.Sin(df);
-                fP.X += xc;
-                fP.Y += yc;
-                VertexList[i] = fP;
-            }
-        }
-        //Метод масштабирования
-        public void Resize(float dx, float dy, float xc, float yc)
-        {
-            PointF fP = new PointF();
-            for (int i = 0; i < VertexList.Count; i++)
-            {
-                fP.X = VertexList[i].X - xc;
-                fP.Y = VertexList[i].Y - yc;
-                fP.X = fP.X * (1 + dx);
-                fP.Y = fP.Y * (1 + dy);
-                fP.X += xc;
-                fP.Y += yc;
-                VertexList[i] = fP;
-            }
-        }
-        //Отражение по Y
-        public void MirrorY(float xc)
-        {
-            PointF fP = new PointF();
-            for (int i = 0; i < VertexList.Count; i++)
-            {
-                fP.Y = VertexList[i].Y;
-                fP.X = VertexList[i].X - xc;
-                fP.X = -fP.X;
-                fP.X += xc;
-                VertexList[i] = fP;
-            }
-        }*/
-    //ТМО
+    //ТМО Кастум фигур кс код
         /*
 // списки краевых x координат для каждой фигуры
         List<int> Xra = new List<int>();

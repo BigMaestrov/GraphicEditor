@@ -101,7 +101,7 @@ public class Figure {
     Метод поворота фигуры
      */
     public void rotate(double df, double xc, double yc) {
-        df = df/180*Math.PI;
+        df = df / 180 * Math.PI;
         for (int i = 0; i < figurePoints.size(); i++) {
             Point temp = new Point(figurePoints.get(i).X - xc, figurePoints.get(i).Y - yc);
             double tempX = temp.X * Math.cos(df) - temp.Y * Math.sin(df);
@@ -112,34 +112,41 @@ public class Figure {
             figurePoints.set(i, temp);
         }
     }
-    public void scaling( Point point)
-    {
-        double xc = 1.1;
-        double yc = 1.1;
-        for (int i = 0; i < figurePoints.size(); i++)
-        {
+
+    public void downScaling(Point point) {
+        for (int i = 0; i < figurePoints.size(); i++) {
             Point temp = new Point(figurePoints.get(i).X - point.X, figurePoints.get(i).Y - point.Y);
-            temp.X *= 0.952381f;
-            temp.Y *= 0.952381f;
+            temp.X *= 0.9;
+            temp.Y *= 0.9;
             temp.X += point.X;
             temp.Y += point.Y;
-            figurePoints.set(i,temp);
+            figurePoints.set(i, temp);
         }
     }
 
-   /* public void rotate(double df, double xc, double yc) {
-        Point fP = new Point(0, 0);
+    public void upScaling(Point point) {
         for (int i = 0; i < figurePoints.size(); i++) {
-            fP.X = figurePoints.get(i).X - xc;
-            fP.Y = figurePoints.get(i).Y - yc;
-            fP.X = fP.X *  Math.cos(df) - fP.Y *  Math.sin(df);
-            fP.Y = fP.Y *  Math.cos(df) + fP.X *  Math.sin(df);
-            fP.X += xc;
-            fP.Y += yc;
-            figurePoints.get(i).setY(fP.Y);
-            figurePoints.get(i).setX(fP.X);
+            Point temp = new Point(figurePoints.get(i).X - point.X, figurePoints.get(i).Y - point.Y);
+            temp.X *= 1.1;
+            temp.Y *= 1.1;
+            temp.X += point.X;
+            temp.Y += point.Y;
+            figurePoints.set(i, temp);
         }
-    }*/
+    }
+
+    public void mirrorY(double yc) {
+        System.out.println();
+        for (int i = 0; i < figurePoints.size(); i++) {
+            Point fP = new Point(0,0);
+            fP.Y = figurePoints.get(i).Y - yc;
+            fP.X = figurePoints.get(i).X;
+            fP.Y = -fP.Y;
+            fP.Y += yc;
+            figurePoints.set(i, fP);
+        }
+
+    }
 
     /*
     Метод возвращающий координаты центра фигуры
