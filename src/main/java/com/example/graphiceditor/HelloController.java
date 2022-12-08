@@ -40,7 +40,7 @@ public class HelloController {
     @FXML
     protected void initialize() {
         // Заполнение полей typeChoiceBox
-        ObservableList<String> types = FXCollections.observableArrayList("Прямая", "Куб Сплайн", "Треугольник", "Стрелка", "Удалить фигуру");
+        ObservableList<String> types = FXCollections.observableArrayList("Прямая", "Куб Сплайн", "Треугольник", "Стрелка", "Удалить фигуру", "Перемещение", "Поворот", "Масштабирование", "Отражение");
         typeChoiceBox.setItems(types);
         typeChoiceBox.setValue("Прямая");
         // Заполнение полей colorComboBox
@@ -207,8 +207,98 @@ public class HelloController {
                 figures.get(i).print(context, canvas1);
             }
         }
-        figureChoiceBox.setItems(figuresNames);
         //Геометрические преобразования
+
+        //Перемещение
+        if (typeChoiceBox.getValue() == "Перемещение") {
+            Point newPoint = new Point(event.getX(), event.getY());
+            PixelWriter pixelWriter = context.getPixelWriter();
+            tempPoints.add(newPoint);
+            if (event.getButton() == MouseButton.PRIMARY) {
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 3; j++) {
+                        pixelWriter.setColor((int) newPoint.getX() + i, (int) newPoint.getY() + j, Color.BLACK);
+                    }
+                }
+            }
+            //Перемещение фигуры
+            for (int i = 0; i < figuresNames.size(); i++) {
+                //Поиск выбранной фигуры
+                if (figuresNames.get(i) == figureChoiceBox.getValue()) {
+                    //Смещение точек
+                    System.out.println("work1");
+                    figures.get(i).move(newPoint);
+                    System.out.println("work2");
+                }
+            }
+            System.out.println("work");
+            context.setFill(Color.WHITE);
+            context.fillRect(0, 0, canvas1.getWidth(), canvas1.getHeight());
+            for (int i = 0; i < figuresNames.size(); i++) {
+                //Установление цвета фигуры
+                context.setStroke(figures.get(i).color);
+                figures.get(i).print(context, canvas1);
+            }
+            figureChoiceBox.setItems(figuresNames);
+
+        }
+        figureChoiceBox.setItems(figuresNames);
+    }
+            /*
+        public void Move(float dx, float dy)
+        {
+            PointF fP = new PointF();
+            for (int i = 0; i < VertexList.Count; i++)
+            {
+                fP.X = VertexList[i].X + dx;
+                fP.Y = VertexList[i].Y + dy;
+                VertexList[i] = fP;
+            }
+        }
+        //Поворот
+        public void Rotate(float df, float xc, float yc)
+        {
+            PointF fP = new PointF();
+            for(int i = 0; i < VertexList.Count; i++)
+            {
+                fP.X = VertexList[i].X - xc;
+                fP.Y = VertexList[i].Y - yc;
+                fP.X = fP.X * (float)Math.Cos(df) - fP.Y * (float)Math.Sin(df);
+                fP.Y = fP.Y * (float)Math.Cos(df) + fP.X * (float)Math.Sin(df);
+                fP.X += xc;
+                fP.Y += yc;
+                VertexList[i] = fP;
+            }
+        }
+        //Масштабирование
+        public void Resize(float dx, float dy, float xc, float yc)
+        {
+            PointF fP = new PointF();
+            for (int i = 0; i < VertexList.Count; i++)
+            {
+                fP.X = VertexList[i].X - xc;
+                fP.Y = VertexList[i].Y - yc;
+                fP.X = fP.X * (1 + dx);
+                fP.Y = fP.Y * (1 + dy);
+                fP.X += xc;
+                fP.Y += yc;
+                VertexList[i] = fP;
+            }
+        }
+        //Отражение
+        public void MirrorY(float xc)
+        {
+            PointF fP = new PointF();
+            for (int i = 0; i < VertexList.Count; i++)
+            {
+                fP.Y = VertexList[i].Y;
+                fP.X = VertexList[i].X - xc;
+                fP.X = -fP.X;
+                fP.X += xc;
+                VertexList[i] = fP;
+            }
+        }
+        //Метод плоско-параллельного перемещения
 
         /*
         private Pgn Pgn; //Преобразумая фигура
@@ -220,8 +310,6 @@ public class HelloController {
         private float mX, mY; //Малые изменения координат
         private float dX, dY; //Малые увеличения
         private float mF; //Малые углы
-
-
          /*
          * Выполнение трансформаций
         public void DoTransformation()
@@ -308,7 +396,7 @@ public class HelloController {
                 VertexList[i] = fP;
             }
         }*/
-        //ТМО
+    //ТМО
         /*
 // списки краевых x координат для каждой фигуры
         List<int> Xra = new List<int>();
@@ -463,7 +551,7 @@ public class HelloController {
         }
     }
     */
-    }
+
 
     private static int returnMax(double num1, double num2) {
         double max = num1;

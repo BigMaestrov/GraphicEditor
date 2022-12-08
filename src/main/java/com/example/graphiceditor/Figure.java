@@ -22,11 +22,11 @@ public class Figure {
         this.color = color;
     }
 
-    public void print(GraphicsContext context, Canvas canvas1){
-        for (int i = 0; i < this.figurePoints.size()-1; i++) {
-            context.strokeLine(figurePoints.get(i).getX(),figurePoints.get(i).getY(), figurePoints.get(i+1).getX(),figurePoints.get(i+1).getY());
+    public void print(GraphicsContext context, Canvas canvas1) {
+        for (int i = 0; i < this.figurePoints.size() - 1; i++) {
+            context.strokeLine(figurePoints.get(i).getX(), figurePoints.get(i).getY(), figurePoints.get(i + 1).getX(), figurePoints.get(i + 1).getY());
         }
-        context.strokeLine(figurePoints.get(this.figurePoints.size()-1).getX(),figurePoints.get(this.figurePoints.size()-1).getY(), figurePoints.get(0).getX(),figurePoints.get(0).getY());
+        context.strokeLine(figurePoints.get(this.figurePoints.size() - 1).getX(), figurePoints.get(this.figurePoints.size() - 1).getY(), figurePoints.get(0).getX(), figurePoints.get(0).getY());
         fillByLine(context, canvas1);
     }
 
@@ -46,8 +46,8 @@ public class Figure {
         this.name = name;
     }
 
-    public void printFiguresData(){
-        System.out.println( this.name +"Num points"+ this.figurePoints.size());
+    public void printFiguresData() {
+        System.out.println(this.name + "Num points" + this.figurePoints.size());
     }
 
     private void fillByLine(GraphicsContext g, Canvas canvas) {
@@ -56,8 +56,7 @@ public class Figure {
         Point pmax = figurePoints.get(0);
         int ymin = 0;
         int ymax = (int) canvas.getHeight();
-        for(Point p : figurePoints)
-        {
+        for (Point p : figurePoints) {
             if (p.Y > pmax.Y) pmax = p;
             if (p.Y < pmin.Y) pmin = p;
         }
@@ -77,9 +76,46 @@ public class Figure {
             //Сортировка
             //xBoundaries.sort((a, b) -> a.compareTo(b));
             for (int el = 0; el < xBoundaries.size() - 1; el += 2) {
-                g.strokeLine(xBoundaries.get(el), y, xBoundaries.get(el+1), y);
+                g.strokeLine(xBoundaries.get(el), y, xBoundaries.get(el + 1), y);
             }
         }
     }
 
+
+    public void move(Point newPoint){
+        Point center = getCenter();
+        double dx = newPoint.X - center.X;
+        double dy = newPoint.Y - center.Y;
+        double x;
+        double y;
+        for(int i =0;i<figurePoints.size();i++){
+            x = figurePoints.get(i).X;
+            y = figurePoints.get(i).Y;
+            figurePoints.get(i).setX(x + dx);
+            figurePoints.get(i).setY(y + dy);
+        }
+    }
+
+    public Point getCenter(){
+        Point center;
+        double minX = figurePoints.get(0).X;
+        double maxX = figurePoints.get(0).X;
+        double minY = figurePoints.get(0).Y;
+        double maxY = figurePoints.get(0).Y;
+        for (int i = 0; i < figurePoints.size(); i++) {
+            if(figurePoints.get(i).X > maxX){
+                maxX = figurePoints.get(i).X;
+            }
+            if(figurePoints.get(i).X < minX){
+                minX = figurePoints.get(i).X ;
+            }
+            if(figurePoints.get(i).Y > maxX){
+                maxX = figurePoints.get(i).Y;
+            }
+            if(figurePoints.get(i).Y < minX){
+                minX = figurePoints.get(i).Y;
+            }
+        }
+        return center = new Point((maxX+minX)/2, (maxY+minY)/2);
+    }
 }
