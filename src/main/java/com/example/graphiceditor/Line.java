@@ -24,7 +24,7 @@ public class Line extends Figure {
         this.DrawLine(context);
     }
 
-    //Отрисовывает кубический сплайн
+    //Отрисовывает линию
     public void DrawLine(GraphicsContext g) {
         {
             PixelWriter pixelWriter = g.getPixelWriter();

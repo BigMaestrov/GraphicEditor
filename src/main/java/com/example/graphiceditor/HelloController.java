@@ -34,8 +34,11 @@ public class HelloController {
     @FXML
     public ChoiceBox<String> colorChoiceBox;
     @FXML
-    public ChoiceBox<String> figureChoiceBox;
-    ObservableList<String> figuresNames = FXCollections.observableArrayList();
+    public ChoiceBox<String> figureChoiceBox1;
+    ObservableList<String> figuresNames1 = FXCollections.observableArrayList();
+    @FXML
+    public ChoiceBox<String> figureChoiceBox2;
+    ObservableList<String> figuresNames2 = FXCollections.observableArrayList();
     @FXML
     Slider angleSlider;
 
@@ -43,7 +46,7 @@ public class HelloController {
     @FXML
     protected void initialize() {
         // Заполнение полей typeChoiceBox
-        ObservableList<String> types = FXCollections.observableArrayList("Прямая", "Куб Сплайн", "Треугольник", "Стрелка", "Удалить фигуру", "Перемещение", "Поворот", "Увеличение", "Уменьшение", "Отражение");
+        ObservableList<String> types = FXCollections.observableArrayList("Прямая", "Куб Сплайн", "Треугольник", "Стрелка", "Удалить фигуру", "Перемещение", "Поворот", "Увеличение", "Уменьшение", "Отражение", "Разность", "Сим. Разность");
         typeChoiceBox.setItems(types);
         typeChoiceBox.setValue("Прямая");
         // Заполнение полей colorComboBox
@@ -61,8 +64,9 @@ public class HelloController {
         context.setFill(Color.WHITE);
         context.fillRect(0, 0, canvas1.getWidth(), canvas1.getHeight());
         figures.clear();
-        figuresNames.clear();
-        figureChoiceBox.setItems(figuresNames);
+        figuresNames1.clear();
+        figureChoiceBox1.setItems(figuresNames1);
+        figureChoiceBox2.setItems(figuresNames2);
     }
 
     // Метод обрабатывающий нажатия на полотно
@@ -95,7 +99,8 @@ public class HelloController {
                 /*context.strokeLine(tempPoints.get(0).getX(), tempPoints.get(0).getY(), tempPoints.get(1).getX(),
                         tempPoints.get(1).getY());*/
                 line.DrawLine(context);
-                figuresNames.add(line.getName());
+                figuresNames1.add(line.getName());
+                figuresNames2.add(line.getName());
                 tempPoints.clear();
             }
         }
@@ -127,7 +132,8 @@ public class HelloController {
                     points[i] = new Point(tempPoints.get(i).getX(), tempPoints.get(i).getY());
                 }
                 cubeSpline.DrawCubeSpline(context, points);
-                figuresNames.add(cubeSpline.getName());
+                figuresNames1.add(cubeSpline.getName());
+                figuresNames2.add(cubeSpline.getName());
                 tempPoints.clear();
             }
         }
@@ -155,7 +161,8 @@ public class HelloController {
                 //Рисование фигуры
                 context.setStroke(decodeColor(colorChoiceBox.getValue()));
                 triangle.print(context, canvas1);
-                figuresNames.add(triangle.getName());
+                figuresNames1.add(triangle.getName());
+                figuresNames2.add(triangle.getName());
                 tempPoints.clear();
             }
         }
@@ -192,21 +199,23 @@ public class HelloController {
                 //Установление цвета фигуры
                 context.setStroke(decodeColor(colorChoiceBox.getValue()));
                 arrow.print(context, canvas1);
-                figuresNames.add(arrow.getName());
+                figuresNames1.add(arrow.getName());
+                figuresNames2.add(arrow.getName());
                 tempPoints.clear();
             }
         }
         //Удаление фигуры
         if (typeChoiceBox.getValue() == "Удалить фигуру") {
-            for (int i = 0; i < figuresNames.size(); i++) {
-                if (figuresNames.get(i) == figureChoiceBox.getValue()) {
+            for (int i = 0; i < figuresNames1.size(); i++) {
+                if (figuresNames1.get(i) == figureChoiceBox1.getValue()) {
                     figures.remove(i);
-                    figuresNames.remove(i);
+                    figuresNames1.remove(i);
+                    figuresNames2.remove(i);
                 }
             }
             context.setFill(Color.WHITE);
             context.fillRect(0, 0, canvas1.getWidth(), canvas1.getHeight());
-            for (int i = 0; i < figuresNames.size(); i++) {
+            for (int i = 0; i < figuresNames1.size(); i++) {
                 //Установление цвета фигуры
                 context.setStroke(figures.get(i).color);
                 figures.get(i).print(context, canvas1);
@@ -226,16 +235,16 @@ public class HelloController {
                 }
             }
             //Перемещение фигуры
-            for (int i = 0; i < figuresNames.size(); i++) {
+            for (int i = 0; i < figuresNames1.size(); i++) {
                 //Поиск выбранной фигуры
-                if (figuresNames.get(i) == figureChoiceBox.getValue()) {
+                if (figuresNames1.get(i) == figureChoiceBox1.getValue()) {
                     //Смещение точек
                     figures.get(i).move(newPoint);
                 }
             }
             context.setFill(Color.WHITE);
             context.fillRect(0, 0, canvas1.getWidth(), canvas1.getHeight());
-            for (int i = 0; i < figuresNames.size(); i++) {
+            for (int i = 0; i < figuresNames1.size(); i++) {
                 //Установление цвета фигуры
                 context.setStroke(figures.get(i).color);
                 figures.get(i).print(context, canvas1);
@@ -251,16 +260,16 @@ public class HelloController {
                 }
             }
             //Поворот фигуры
-            for (int i = 0; i < figuresNames.size(); i++) {
+            for (int i = 0; i < figuresNames1.size(); i++) {
                 //Поиск выбранной фигуры
-                if (figuresNames.get(i) == figureChoiceBox.getValue()) {
+                if (figuresNames1.get(i) == figureChoiceBox1.getValue()) {
                     //Смещение точек
                     figures.get(i).rotate(angleSlider.getValue(), newPoint.X, newPoint.Y);
                 }
             }
             context.setFill(Color.WHITE);
             context.fillRect(0, 0, canvas1.getWidth(), canvas1.getHeight());
-            for (int i = 0; i < figuresNames.size(); i++) {
+            for (int i = 0; i < figuresNames1.size(); i++) {
                 //Установление цвета фигуры
                 context.setStroke(figures.get(i).color);
                 figures.get(i).print(context, canvas1);
@@ -275,16 +284,16 @@ public class HelloController {
                 }
             }
             //Масштабирование
-            for (int i = 0; i < figuresNames.size(); i++) {
+            for (int i = 0; i < figuresNames1.size(); i++) {
                 //Поиск выбранной фигуры
-                if (figuresNames.get(i) == figureChoiceBox.getValue()) {
+                if (figuresNames1.get(i) == figureChoiceBox1.getValue()) {
                     //Смещение точек
                     figures.get(i).upScaling(newPoint);
                 }
             }
             context.setFill(Color.WHITE);
             context.fillRect(0, 0, canvas1.getWidth(), canvas1.getHeight());
-            for (int i = 0; i < figuresNames.size(); i++) {
+            for (int i = 0; i < figuresNames1.size(); i++) {
                 //Установление цвета фигуры
                 context.setStroke(figures.get(i).color);
                 figures.get(i).print(context, canvas1);
@@ -299,16 +308,16 @@ public class HelloController {
                 }
             }
             //Масштабирование
-            for (int i = 0; i < figuresNames.size(); i++) {
+            for (int i = 0; i < figuresNames1.size(); i++) {
                 //Поиск выбранной фигуры
-                if (figuresNames.get(i) == figureChoiceBox.getValue()) {
+                if (figuresNames1.get(i) == figureChoiceBox1.getValue()) {
                     //Смещение точек
                     figures.get(i).downScaling(newPoint);
                 }
             }
             context.setFill(Color.WHITE);
             context.fillRect(0, 0, canvas1.getWidth(), canvas1.getHeight());
-            for (int i = 0; i < figuresNames.size(); i++) {
+            for (int i = 0; i < figuresNames1.size(); i++) {
                 //Установление цвета фигуры
                 context.setStroke(figures.get(i).color);
                 figures.get(i).print(context, canvas1);
@@ -323,9 +332,9 @@ public class HelloController {
                 }
             }
             //Масштабирование
-            for (int i = 0; i < figuresNames.size(); i++) {
+            for (int i = 0; i < figuresNames1.size(); i++) {
                 //Поиск выбранной фигуры
-                if (figuresNames.get(i) == figureChoiceBox.getValue()) {
+                if (figuresNames1.get(i) == figureChoiceBox1.getValue()) {
                     //Смещение точек
                     figures.get(i).mirrorY(newPoint.Y);
                 }
@@ -338,165 +347,53 @@ public class HelloController {
                 figures.get(i).print(context, canvas1);
             }
         }
-        figureChoiceBox.setItems(figuresNames);
-    }
-
-    //ТМО Кастум фигур кс код
-        /*
-// списки краевых x координат для каждой фигуры
-        List<int> Xra = new List<int>();
-        List<int> Xla = new List<int>();
-        List<int> Xrb = new List<int>();
-        List<int> Xlb = new List<int>();
-
-        // Очищаем экран перед отрисовкой
-        g.Clear(Color.White);
-
-        for (int y = ymin; y <= ymax; y++)
-        {
-            // очищаем списки координат
-            Xra.Clear();
-            Xla.Clear();
-            Xlb.Clear();
-            Xrb.Clear();
-
-            // заполнение границ фигуры А
-            for (int i = 0; i < VertexListA.Count; i++)
-            {
-                int k = i < VertexListA.Count - 1 ? i + 1 : 0;
-                // обработка граничных случаев
-                if (((VertexListA[i].Y < y) && (VertexListA[k].Y >= y)) || ((VertexListA[i].Y >= y) && (VertexListA[k].Y < y)))
-                {
-                    // формула определения x координаты пересечения двух отрезков, заданных вершинами
-                    double x = VertexListA[i].X + ((VertexListA[k].X - VertexListA[i].X) * (y - VertexListA[i].Y)) / (VertexListA[k].Y - VertexListA[i].Y);
-                    if (VertexListA[k].Y - VertexListA[i].Y < 0)
-                    {
-                        Xra.Add((int)x);
-                    }
-                    else
-                    {
-                        Xla.Add((int)x);
-                    }
+        if (typeChoiceBox.getValue() == "Разность") {
+            int figure1Index =-1; //Индекс 1 фигуры
+            int figure2Index =-1; //Индекс 2 фигуры
+            Point newPoint = new Point(event.getX(), event.getY());
+            PixelWriter pixelWriter = context.getPixelWriter();
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    pixelWriter.setColor((int) newPoint.getX() + i, (int) newPoint.getY() + j, Color.BLACK);
                 }
             }
-
-            // заполнение границ фигуры В
-            for (int i = 0; i < VertexListB.Count; i++)
-            {
-                int k = i < VertexListB.Count - 1 ? i + 1 : 0;
-                // обработка граничных случаев
-                if (((VertexListB[i].Y < y) && (VertexListB[k].Y >= y)) || ((VertexListB[i].Y >= y) && (VertexListB[k].Y < y)))
-                {
-                    // формула определения x координаты пересечения двух отрезков, заданных вершинами
-                    double x = VertexListB[i].X + ((VertexListB[k].X - VertexListB[i].X) * (y - VertexListB[i].Y)) / (VertexListB[k].Y - VertexListB[i].Y);
-                    if (VertexListB[k].Y - VertexListB[i].Y < 0)
-                    {
-                        Xrb.Add((int)x);
-                    }
-                    else
-                    {
-                        Xlb.Add((int)x);
-                    }
+            //Поиск фигуры 1
+            for (int i = 0; i < figuresNames1.size(); i++) {
+                if (figuresNames1.get(i) == figureChoiceBox1.getValue()) {
+                    //Смещение точек
+                    figure1Index = i;
                 }
             }
-
-            List<PointInfo> M = new List<PointInfo>(); // рабочии массив
-
-            // Заполнение рабочего массива:
-            int n = Xla.Count;
-
-            for (int i = 0; i < n; i++)
-            {
-                PointInfo Buff = new PointInfo();
-                Buff.x = Xla[i];
-                Buff.dQ = 2;
-                M.Add(Buff);
-            }
-
-            n = Xra.Count;
-
-            for (int i = 0; i < n; i++)
-            {
-                PointInfo Buff = new PointInfo();
-                Buff.x = Xra[i];
-                Buff.dQ = -2;
-                M.Add(Buff);
-            }
-
-            n = Xlb.Count;
-
-            for (int i = 0; i < n; i++)
-            {
-                PointInfo Buff = new PointInfo();
-                Buff.x = Xlb[i];
-                Buff.dQ = 1;
-                M.Add(Buff);
-            }
-
-            n = Xrb.Count;
-
-            for (int i = 0; i < n; i++)
-            {
-                PointInfo Buff = new PointInfo();
-                Buff.x = Xrb[i];
-                Buff.dQ = -1;
-                M.Add(Buff);
-            }
-
-            // сортируем M по возрастанию X координаты
-            M.Sort((a, b) => a.x.CompareTo(b.x));
-
-            int Q = 0;
-            int xemin = 0;
-            int xemax = pictureBox1.Width;
-
-            // Конечные списки x границ
-            List<int> Xlr = new List<int>();
-            List<int> Xrr= new List<int>();
-
-            if (M.Count == 0) continue;
-
-            if ((M[0].x >= xemin) && (M[0].dQ < 0))
-            {
-                Xlr.Add(xemin);
-                Q = -M[0].dQ;
-            }
-            // Выполнение ТМО
-            for (int i = 0; i < M.Count; i++)
-            {
-                int x = M[i].x;
-                int Qnew = Q + M[i].dQ;
-                if (
-                        (Q < SetQ[0] || Q > SetQ[1]) &&
-                                (Qnew >= SetQ[0] && Qnew <= SetQ[1])
-                )
-                {
-                    Xlr.Add(x);
+            //Поиск фигуры 2
+            for (int i = 0; i < figuresNames1.size(); i++) {
+                if (figuresNames2.get(i) == figureChoiceBox2.getValue()) {
+                    figure2Index = i;
                 }
-                if (
-                        (Q >= SetQ[0] && Q <= SetQ[1]) &&
-                                (Qnew < SetQ[0] || Qnew > SetQ[1])
-                )
-                {
-                    Xrr.Add(x);
-                }
-                Q = Qnew;
             }
-            if (Q >= SetQ[0] && Q <= SetQ[1])
-            {
-                Xrr.Add(xemax);
-            }
-            for (int id = 0; id < Xlr.Count && id < Xrr.Count; id++)
-            {
-                if (Xlr[id] < Xrr[id])
-                {
-                    g.DrawLine(DrawPen, new Point(Xlr[id], y), new Point(Xrr[id], y));
-                }
+            //Закрашивание экрана
+            context.setFill(Color.WHITE);
+            context.fillRect(0, 0, canvas1.getWidth(), canvas1.getHeight());
+            //ТМО                      figurePoints, "Стрелка" + figures.size(), decodeColor(colorChoiceBox.getValue())
+            figures.add(new CustomFigure()); //figures.add(new CustomFigure("ТМО" + lastIndex, colorDialog.Color, (ITMOable)FigureList[TMOFirstSelect], (ITMOable)FigureList[TMOLastSelect], TMOtype));
+            //"Сим. разность"==1
+            //"Разность"==2
+            //Удаление данных о фигурах
+            figures.remove(figure1Index);
+            figures.remove(figure2Index);
+            figuresNames1.remove(figure1Index);
+            figuresNames1.remove(figure2Index);
+            figuresNames2.remove(figure1Index);
+            figuresNames2.remove(figure2Index);
+            //Отрисовка фигур
+            for (int i = 0; i < figures.size(); i++) {
+                //Установление цвета фигуры
+                context.setStroke(figures.get(i).color);
+                figures.get(i).print(context, canvas1);
             }
         }
+        figureChoiceBox1.setItems(figuresNames1);
+        figureChoiceBox2.setItems(figuresNames2);
     }
-    */
-
 
     private static int returnMax(double num1, double num2) {
         double max = num1;

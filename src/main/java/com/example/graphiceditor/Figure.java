@@ -13,6 +13,7 @@ public class Figure {
     ArrayList<Point> figurePoints;
     String name;
     Color color;
+    Boolean mirrored;
 
     public Figure() {
     }
@@ -21,6 +22,8 @@ public class Figure {
         this.figurePoints = figurePoints;
         this.name = name;
         this.color = color;
+        //Проверка на то была ли отражена фигура
+        mirrored = false;
     }
 
     public void print(GraphicsContext context, Canvas canvas1) {
@@ -136,9 +139,10 @@ public class Figure {
     }
 
     public void mirrorY(double yc) {
+        mirrored = !mirrored;
         System.out.println();
         for (int i = 0; i < figurePoints.size(); i++) {
-            Point fP = new Point(0,0);
+            Point fP = new Point(0, 0);
             fP.Y = figurePoints.get(i).Y - yc;
             fP.X = figurePoints.get(i).X;
             fP.Y = -fP.Y;
@@ -171,5 +175,26 @@ public class Figure {
             }
         }
         return new Point((maxX + minX) / 2, (maxY + minY) / 2);
+    }
+
+
+    public List<List<Integer>> getPointsBySide(int Y) {
+        List<List<Integer>> points = new ArrayList<List<Integer>>();
+        List<Integer> leftPoints = new ArrayList<>();
+        List<Integer> rightPoints = new ArrayList<Integer>();
+        for (int i = 0; i < figurePoints.size(); i++) {
+            int k = i < figurePoints.size() - 1 ? i + 1 : 0;
+            // обработка граничных случаев
+            if (((figurePoints.get(i).Y < Y) && (figurePoints.get(k).Y >= Y)) || ((figurePoints.get(i).Y >= Y) && (figurePoints.get(k).Y < Y))) {
+                // формула определения x координаты пересечения двух отрезков, заданных вершинами
+                double x = figurePoints.get(i).X + ((figurePoints.get(k).X - figurePoints.get(i).X) * (Y - figurePoints.get(i).Y)) / (figurePoints.get(k).Y - figurePoints.get(i).Y);
+                if ((figurePoints.get((mirrored ? i : k)).Y - (figurePoints.get((mirrored ? k : i)).Y) < 0))
+                    leftPoints.add((int) x);
+                else rightPoints.add((int) x);
+            }
+        }
+        points.add(leftPoints);
+        points.add(rightPoints);
+        return points;
     }
 }
