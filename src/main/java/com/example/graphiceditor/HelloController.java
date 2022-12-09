@@ -87,13 +87,15 @@ public class HelloController {
                 for (int i = 0; i < tempPoints.size(); i++) {
                     figurePoints.add(tempPoints.get(i));
                 }
-                Figure figure = new Figure(figurePoints, "Прямая" + figures.size(), decodeColor(colorChoiceBox.getValue()));
-                figures.add(figure);
+                Line line = new Line(figurePoints, "Прямая" + figures.size(), decodeColor(colorChoiceBox.getValue()));
+                figures.add(line);
                 //Рисование фигуры
                 context.setStroke(decodeColor(colorChoiceBox.getValue()));
-                context.strokeLine(tempPoints.get(0).getX(), tempPoints.get(0).getY(), tempPoints.get(1).getX(),
-                        tempPoints.get(1).getY());
-                figuresNames.add(figure.getName());
+
+                /*context.strokeLine(tempPoints.get(0).getX(), tempPoints.get(0).getY(), tempPoints.get(1).getX(),
+                        tempPoints.get(1).getY());*/
+                line.DrawLine(context);
+                figuresNames.add(line.getName());
                 tempPoints.clear();
             }
         }
@@ -338,6 +340,7 @@ public class HelloController {
         }
         figureChoiceBox.setItems(figuresNames);
     }
+
     //ТМО Кастум фигур кс код
         /*
 // списки краевых x координат для каждой фигуры
